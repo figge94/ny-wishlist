@@ -17,16 +17,16 @@ export default function SettingsClient({ user }: Props) {
         {[
           { k: "profile", label: "Profil" },
           { k: "security", label: "Säkerhet" },
-          { k: "notifications", label: "Notiser" },
+          { k: "notifications", label: "Notiser" }
         ].map((t) => (
           <button
             key={t.k}
             onClick={() => setTab(t.k as any)}
             className={[
-              "rounded-xl px-3 py-1.5 text-sm border",
+              "rounded-full px-4 py-1 text-sm border",
               tab === t.k
                 ? "bg-indigo-50 border-indigo-200 text-indigo-700"
-                : "bg-white border-gray-300 text-gray-700 hover:bg-gray-100",
+                : "bg-white border-gray-300 text-gray-700 hover:bg-gray-100"
             ].join(" ")}>
             {t.label}
           </button>
@@ -51,7 +51,7 @@ function ProfileForm({ user }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl border bg-white p-4 space-y-4 max-w-lg">
+      className="rounded-2xl border border-slate-200 bg-white p-4 space-y-4 max-w-lg shadow-sm">
       <div>
         <label className="block text-sm text-gray-700">Namn</label>
         <input
@@ -69,7 +69,7 @@ function ProfileForm({ user }: Props) {
           className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
       </div>
-      <button className="rounded-xl bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700">
+      <button className="rounded-xl bg-slate-600 text-white px-4 py-2 text-sm hover:bg-slate-700">
         Spara
       </button>
     </form>
@@ -90,7 +90,7 @@ function SecurityForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl border bg-white p-4 space-y-4 max-w-lg">
+      className="rounded-2xl border border-slate-200 bg-white p-4 space-y-4 max-w-lg shadow-sm">
       <div>
         <label className="block text-sm text-gray-700">
           Nuvarande lösenord
@@ -128,7 +128,7 @@ function SecurityForm() {
           />
           Aktivera 2FA (placeholder)
         </label>
-        <button className="rounded-xl bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700">
+        <button className="rounded-xl bg-slate-600 text-white px-4 py-2 text-sm hover:bg-slate-700">
           Spara
         </button>
       </div>
@@ -145,7 +145,7 @@ function NotificationsForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl border bg-white p-4 space-y-4 max-w-lg">
+      className="rounded-2xl border border-slate-200 bg-white p-4 space-y-4 max-w-lg shadow-sm">
       <Toggle
         name="emailInvites"
         label="Maila mig vid inbjudningar"
@@ -158,7 +158,7 @@ function NotificationsForm() {
         defaultChecked
       />
       <div>
-        <button className="rounded-xl bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700">
+        <button className="rounded-xl bg-slate-600 text-white px-4 py-2 text-sm hover:bg-slate-700">
           Spara
         </button>
       </div>
@@ -169,7 +169,7 @@ function NotificationsForm() {
 function Toggle({
   name,
   label,
-  defaultChecked,
+  defaultChecked
 }: {
   name: string;
   label: string;
@@ -182,7 +182,7 @@ function Toggle({
         type="checkbox"
         name={name}
         defaultChecked={defaultChecked}
-        className="h-5 w-9 rounded-full accent-indigo-600"
+        className="h-5 w-9 rounded-full accent-slate-500"
       />
     </label>
   );

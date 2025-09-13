@@ -9,10 +9,10 @@ export default function FriendsPage() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [friends, setFriends] = useState<Friend[]>([
     { id: "1", name: "Anna Svensson", email: "anna@example.com" },
-    { id: "2", name: "Johan Nilsson", email: "johan@example.com" },
+    { id: "2", name: "Johan Nilsson", email: "johan@example.com" }
   ]);
   const [requests, setRequests] = useState<Friend[]>([
-    { id: "3", name: "Lisa Karlsson", email: "lisa@example.com" },
+    { id: "3", name: "Lisa Karlsson", email: "lisa@example.com" }
   ]);
 
   const filtered = useMemo(
@@ -58,7 +58,7 @@ export default function FriendsPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Sök vän…"
-            className="w-full border border-gray-300 rounded-xl px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+            className="w-full border border-gray-300 rounded-full px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
           />
         </div>
       </div>
@@ -75,8 +75,8 @@ export default function FriendsPage() {
             {filtered.map((f) => (
               <li
                 key={f.id}
-                className="flex items-center gap-3 rounded-xl border bg-white p-3">
-                <div className="h-9 w-9 rounded-full bg-indigo-100 text-indigo-700 grid place-items-center text-sm font-medium">
+                className="flex items-center gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
+                <div className="h-9 w-9 rounded-full bg-sky-200 text-sky-800 grid place-items-center text-sm font-medium">
                   {f.name[0]}
                 </div>
                 <div className="min-w-0">
@@ -108,7 +108,7 @@ export default function FriendsPage() {
             {requests.map((r) => (
               <li
                 key={r.id}
-                className="flex items-center gap-3 rounded-xl border bg-white p-3">
+                className="flex items-center gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
                 <div className="h-8 w-8 rounded-full bg-gray-100 grid place-items-center text-xs font-medium">
                   {r.name[0]}
                 </div>
@@ -121,12 +121,12 @@ export default function FriendsPage() {
                 <div className="ml-auto flex items-center gap-2">
                   <button
                     onClick={() => accept(r.id)}
-                    className="text-xs text-white bg-indigo-600 px-2.5 py-1 rounded-lg hover:bg-indigo-700">
+                    className="text-xs text-white bg-indigo-600 px-3 py-2 rounded-full hover:bg-indigo-700">
                     Acceptera
                   </button>
                   <button
                     onClick={() => decline(r.id)}
-                    className="text-xs text-gray-700 border px-2.5 py-1 rounded-lg hover:bg-gray-100">
+                    className="text-xs text-gray-700 border border-gray-300 px-3 py-2 rounded-full hover:bg-gray-100">
                     Avböj
                   </button>
                 </div>
@@ -137,7 +137,7 @@ export default function FriendsPage() {
       </section>
 
       {/* Bjud in */}
-      <section className="rounded-2xl border bg-white p-4">
+      <section className="rounded-2xl shadow-sm bg-white p-4">
         <h2 className="text-sm font-medium text-gray-700">Bjud in vän</h2>
         <form
           onSubmit={invite}
@@ -148,9 +148,9 @@ export default function FriendsPage() {
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
             placeholder="namn@exempel.se"
-            className="flex-1 border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="flex-1 border border-gray-300 rounded-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
-          <button className="rounded-xl bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700">
+          <button className="rounded-full bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700">
             Skicka inbjudan
           </button>
         </form>

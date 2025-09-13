@@ -4,16 +4,16 @@ import { Card, CardTitle, CardValue } from "@/components/card";
 
 export default function DashboardPage() {
   const stats = [
-    { label: "Listor", value: 3 },
+    { label: "Önskelistor", value: 3 },
     { label: "Objekt totalt", value: 14 },
     { label: "Klarmarkerade", value: 5 },
-    { label: "Att göra", value: 9 },
+    { label: "Att göra", value: 9 }
   ];
 
   const recent = [
     { title: "Hörlurar", list: "Min första lista", ts: "Idag 10:12" },
     { title: "Hoodie", list: "Min första lista", ts: "Igår 18:20" },
-    { title: "Presentkort", list: "Födelsedag", ts: "2 dgr sedan" },
+    { title: "Presentkort", list: "Födelsedag", ts: "2 dgr sedan" }
   ];
 
   const cards = [
@@ -21,14 +21,14 @@ export default function DashboardPage() {
     {
       href: "/dashboard/wishlist",
       title: "Önskelistor",
-      text: "Dina önskelistor",
+      text: "Dina önskelistor"
     },
     { href: "/dashboard/friends", title: "Vänner", text: "Hantera vänner" },
     {
       href: "/dashboard/settings",
       title: "Inställningar",
-      text: "Profil & säkerhet",
-    },
+      text: "Profil & säkerhet"
+    }
   ];
 
   return (
@@ -52,7 +52,7 @@ export default function DashboardPage() {
             className="rounded-2xl border bg-white p-6 shadow hover:shadow-lg hover:-translate-y-0.5 transition">
             <h2 className="text-lg font-semibold">{c.title}</h2>
             <p className="text-sm text-gray-600">{c.text}</p>
-            <span className="inline-block mt-4 rounded-full bg-blue-500 text-white px-4 py-1.5 text-sm">
+            <span className="inline-block mt-4 rounded-full bg-blue-400 text-white px-4 py-1.5 text-sm">
               Öppna
             </span>
           </Link>
@@ -95,17 +95,17 @@ export default function DashboardPage() {
           <div className="grid gap-2">
             <Link
               href="/dashboard/wishlist/new"
-              className="rounded-xl border px-4 py-2 hover:bg-gray-50">
+              className="rounded-full border border-slate-300 bg-slate-100 shadow-md px-4 py-2 hover:bg-slate-200">
               Skapa ny lista
             </Link>
             <Link
               href="/calendar"
-              className="rounded-xl border px-4 py-2 hover:bg-gray-50">
+              className="rounded-full border border-slate-300 bg-slate-100 shadow-md px-4 py-2 hover:bg-slate-200">
               Gå till kalendern
             </Link>
             <Link
               href="/news"
-              className="rounded-xl border px-4 py-2 hover:bg-gray-50">
+              className="rounded-full border border-slate-300 bg-slate-100 shadow-md px-4 py-2 hover:bg-slate-200">
               Läs de senaste nyheterna
             </Link>
           </div>
