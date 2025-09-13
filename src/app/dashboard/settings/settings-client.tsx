@@ -4,7 +4,9 @@ import { useState } from "react";
 type Props = { user: { name?: string; email?: string } };
 
 export default function SettingsClient({ user }: Props) {
-  const [tab, setTab] = useState<"profile" | "security" | "notifications">("profile");
+  const [tab, setTab] = useState<"profile" | "security" | "notifications">(
+    "profile"
+  );
 
   return (
     <div className="space-y-6">
@@ -16,15 +18,16 @@ export default function SettingsClient({ user }: Props) {
           { k: "profile", label: "Profil" },
           { k: "security", label: "Säkerhet" },
           { k: "notifications", label: "Notiser" },
-        ].map(t => (
+        ].map((t) => (
           <button
             key={t.k}
             onClick={() => setTab(t.k as any)}
             className={[
               "rounded-xl px-3 py-1.5 text-sm border",
-              tab === t.k ? "bg-indigo-50 border-indigo-200 text-indigo-700" : "bg-white border-gray-300 text-gray-700 hover:bg-gray-100",
-            ].join(" ")}
-          >
+              tab === t.k
+                ? "bg-indigo-50 border-indigo-200 text-indigo-700"
+                : "bg-white border-gray-300 text-gray-700 hover:bg-gray-100",
+            ].join(" ")}>
             {t.label}
           </button>
         ))}
@@ -46,7 +49,9 @@ function ProfileForm({ user }: Props) {
     alert("Profil uppdaterad ✅");
   }
   return (
-    <form onSubmit={onSubmit} className="rounded-2xl border bg-white p-4 space-y-4 max-w-lg">
+    <form
+      onSubmit={onSubmit}
+      className="rounded-2xl border bg-white p-4 space-y-4 max-w-lg">
       <div>
         <label className="block text-sm text-gray-700">Namn</label>
         <input
@@ -83,22 +88,44 @@ function SecurityForm() {
     alert("Lösenord uppdaterat ✅");
   }
   return (
-    <form onSubmit={onSubmit} className="rounded-2xl border bg-white p-4 space-y-4 max-w-lg">
+    <form
+      onSubmit={onSubmit}
+      className="rounded-2xl border bg-white p-4 space-y-4 max-w-lg">
       <div>
-        <label className="block text-sm text-gray-700">Nuvarande lösenord</label>
-        <input name="currentPassword" type="password" className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm" />
+        <label className="block text-sm text-gray-700">
+          Nuvarande lösenord
+        </label>
+        <input
+          name="currentPassword"
+          type="password"
+          className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm"
+        />
       </div>
       <div>
         <label className="block text-sm text-gray-700">Nytt lösenord</label>
-        <input name="newPassword" type="password" className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm" />
+        <input
+          name="newPassword"
+          type="password"
+          className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm"
+        />
       </div>
       <div>
-        <label className="block text-sm text-gray-700">Bekräfta nytt lösenord</label>
-        <input name="confirm" type="password" className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm" />
+        <label className="block text-sm text-gray-700">
+          Bekräfta nytt lösenord
+        </label>
+        <input
+          name="confirm"
+          type="password"
+          className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm"
+        />
       </div>
       <div className="flex items-center justify-between">
         <label className="inline-flex items-center gap-2 text-sm text-gray-700">
-          <input type="checkbox" className="rounded border-gray-300" name="twofa" />
+          <input
+            type="checkbox"
+            className="rounded border-gray-300"
+            name="twofa"
+          />
           Aktivera 2FA (placeholder)
         </label>
         <button className="rounded-xl bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700">
@@ -116,10 +143,20 @@ function NotificationsForm() {
     alert("Notiser uppdaterade ✅");
   }
   return (
-    <form onSubmit={onSubmit} className="rounded-2xl border bg-white p-4 space-y-4 max-w-lg">
-      <Toggle name="emailInvites" label="Maila mig vid inbjudningar" defaultChecked />
+    <form
+      onSubmit={onSubmit}
+      className="rounded-2xl border bg-white p-4 space-y-4 max-w-lg">
+      <Toggle
+        name="emailInvites"
+        label="Maila mig vid inbjudningar"
+        defaultChecked
+      />
       <Toggle name="listUpdates" label="Maila mig när listor uppdateras" />
-      <Toggle name="purchaseMarks" label="Meddela när någon markerar ett köp" defaultChecked />
+      <Toggle
+        name="purchaseMarks"
+        label="Meddela när någon markerar ett köp"
+        defaultChecked
+      />
       <div>
         <button className="rounded-xl bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700">
           Spara
@@ -129,11 +166,24 @@ function NotificationsForm() {
   );
 }
 
-function Toggle({ name, label, defaultChecked }: { name: string; label: string; defaultChecked?: boolean }) {
+function Toggle({
+  name,
+  label,
+  defaultChecked,
+}: {
+  name: string;
+  label: string;
+  defaultChecked?: boolean;
+}) {
   return (
     <label className="flex items-center justify-between gap-4">
       <span className="text-sm text-gray-700">{label}</span>
-      <input type="checkbox" name={name} defaultChecked={defaultChecked} className="h-5 w-9 rounded-full accent-indigo-600" />
+      <input
+        type="checkbox"
+        name={name}
+        defaultChecked={defaultChecked}
+        className="h-5 w-9 rounded-full accent-indigo-600"
+      />
     </label>
   );
 }

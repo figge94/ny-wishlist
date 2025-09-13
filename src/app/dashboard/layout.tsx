@@ -19,7 +19,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
       {/* Main */}
       <div className="flex flex-col">
         {/* Header */}
-        <header className="sticky top-0 z-10 bg-white/70 backdrop-blur border-b">
+        <header className="sticky top-0 z-10 bg-white/70 backdrop-blur border-b shadow-sm">
           <div className="px-4 md:px-6 py-3 flex items-center gap-3">
             {/* Mobile menu */}
             <div className="md:hidden">

@@ -5,7 +5,7 @@ import { LayoutDashboard, ListChecks, Users, Settings } from "lucide-react";
 
 const links = [
   { href: "/dashboard", label: "Översikt", icon: LayoutDashboard },
-  { href: "/lists", label: "Listor", icon: ListChecks },
+  { href: "/wishlist", label: "Önskelistor", icon: ListChecks },
   { href: "/friends", label: "Vänner", icon: Users },
   { href: "/settings", label: "Inställningar", icon: Settings },
 ];

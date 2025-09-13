@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Parisienne  } from "next/font/google";
+import { Parisienne } from "next/font/google";
 
-const parisienne  = Parisienne ({
+const parisienne = Parisienne({
   subsets: ["latin"],
-  weight: "400", 
+  weight: "400",
 });
 
 export default function Home() {
@@ -11,33 +11,32 @@ export default function Home() {
     { href: "/news", title: "Nyheter", text: "De senaste nyheterna" },
     { href: "/calendar", title: "Kalender", text: "Visa kalendern" },
     { href: "/dashboard", title: "Översikt", text: "Din översikt" },
-    { href: "/wishlist", title: "Önskelistor", text: "Dina önskelistor" }
+    { href: "/wishlist", title: "Önskelistor", text: "Dina önskelistor" },
   ];
 
   return (
     <main className="min-h-screen grid place-items-center p-8">
       <section className="w-full max-w-4xl">
         <h1 className="text-4xl md:text-5xl text-slate-800 mb-6">
-          <span className={`${parisienne.className}`}>
-            WishList
-          </span>
-         
-        </h1> 
-        
+          <span className={`${parisienne.className}`}>WishList</span>
+        </h1>
+
         <p className="mt-2 text-md text-slate-500 italic font-light tracking-wide">
           Önskelistor utan krångel.
         </p>
-        
+
         <p className="text-lg text-slate-600 max-w-2xl mb-8">
-          Gör presentplaneringen enkel 🎁  
-          Med WishList samlar du alla dina önskelistor på ett ställe – snyggt, smidigt och delbart.  
-          Dela med familj och vänner, kryssa av det som är köpt och undvik dubbelköp.  
+          Gör presentplaneringen enkel 🎁 Med WishList samlar du alla dina
+          önskelistor på ett ställe – snyggt, smidigt och delbart. Dela med
+          familj och vänner, kryssa av det som är köpt och undvik dubbelköp.
           Enklare kan det inte bli!
         </p>
 
         <div className="grid gap-6 sm:grid-cols-3">
-          {cards.map(c => (
-            <Link key={c.href} href={c.href}
+          {cards.map((c) => (
+            <Link
+              key={c.href}
+              href={c.href}
               className="rounded-2xl bg-white shadow p-6 hover:shadow-lg transition block">
               <h2 className="text-xl font-semibold mb-1">{c.title}</h2>
               <p className="text-gray-600 text-sm">{c.text}</p>
@@ -52,14 +51,12 @@ export default function Home() {
       <div className="flex gap-4 mb-12">
         <a
           href="/signup"
-          className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-indigo-700 transition"
-        >
+          className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-indigo-700 transition">
           Skapa konto
         </a>
         <a
           href="/wishlist"
-          className="bg-white border px-6 py-3 rounded-lg font-semibold shadow hover:bg-gray-50 transition"
-        >
+          className="bg-white border px-6 py-3 rounded-lg font-semibold shadow hover:bg-gray-50 transition">
           Utforska listor
         </a>
       </div>
@@ -88,5 +85,5 @@ function Feature({ title, desc }: { title: string; desc: string }) {
       <h2 className="font-bold text-xl mb-3">{title}</h2>
       <p className="text-gray-600">{desc}</p>
     </div>
-  )
+  );
 }
