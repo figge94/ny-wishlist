@@ -4,11 +4,13 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+const PREFIX = "/dashboard";
+
 const items = [
-  { href: "/dashboard", label: "Översikt" },
-  { href: "/lists", label: "Listor" },
-  { href: "/friends", label: "Vänner" },
-  { href: "/settings", label: "Inställningar" },
+  { href: `${PREFIX}`, label: "Översikt" },
+  { href: `${PREFIX}/wishlist`, label: "Listor" },
+  { href: `${PREFIX}/friends`, label: "Vänner" },
+  { href: `${PREFIX}/settings`, label: "Inställningar" },
 ];
 
 export default function MobileNav() {

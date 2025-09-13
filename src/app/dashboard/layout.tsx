@@ -26,7 +26,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
               <MobileNav />
             </div>
 
-            <h1 className="text-base md:text-lg font-semibold text-gray-800">Välkommen tillbaka 👋</h1>
+            <h1 className="text-base md:text-lg font-semibold text-gray-800">Din översikt</h1>
 
             {/* Search */}
             <div className="ml-auto w-full max-w-xs">
@@ -34,7 +34,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <input
                   placeholder="Sök…"
-                  className="w-full border border-gray-300 rounded-xl pl-9 pr-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full border border-gray-300 rounded-full pl-9 pr-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
             </div>

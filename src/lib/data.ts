@@ -1,7 +1,7 @@
 export type AppUser = {
   id: string;
   name: string;
-  email: string; // lägg till
+  email: string;
 };
 
 export async function getUser(id: string): Promise<AppUser> {

@@ -51,8 +51,8 @@ export default function DashboardPage() {
           <h2 className="text-lg font-semibold mb-3">Snabbåtgärder</h2>
           <div className="grid gap-2">
             <a href="/wishlist" className="rounded-xl border px-4 py-2 hover:bg-gray-50">Skapa ny lista</a>
-            <a href="/calendar" className="rounded-xl border px-4 py-2 hover:bg-gray-50">Gå till shop</a>
-            <a href="/blog" className="rounded-xl border px-4 py-2 hover:bg-gray-50">Skriv inlägg</a>
+            <a href="/calendar" className="rounded-xl border px-4 py-2 hover:bg-gray-50">Gå till kalendern</a>
+            <a href="/news" className="rounded-xl border px-4 py-2 hover:bg-gray-50">Läs de senaste nyheterna</a>
           </div>
         </Card>
       </section>
