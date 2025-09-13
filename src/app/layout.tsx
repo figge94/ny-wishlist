@@ -1,7 +1,7 @@
 import Link from "next/link"
 import "./globals.css";
 
-export const metadata = { title: "Önskeplaneraren" };
+export const metadata = { title: "WistList" };
 
 export default function RootLayout({
   children,
@@ -21,7 +21,7 @@ export default function RootLayout({
           <Link href="/blog" className="hover:underline">
             Blogg
           </Link>
-          <Link href="/shop" className="hover:underline">
+          <Link href="/calendar" className="hover:underline">
             Kalender
           </Link>
           <Link href="/dashboard" className="hover:underline">

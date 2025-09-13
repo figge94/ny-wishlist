@@ -1,9 +1,15 @@
 import Link from "next/link";
+import { Parisienne  } from "next/font/google";
+
+const parisienne  = Parisienne ({
+  subsets: ["latin"],
+  weight: "400", 
+});
 
 export default function Home() {
   const cards = [
-    { href: "/blog", title: "Blogg", text: "Nyheter & inlägg" },
-    { href: "/calendar", title: "Kalender", text: "Kalender" },
+    { href: "/news", title: "Nyheter", text: "De senaste nyheterna" },
+    { href: "/calendar", title: "Kalender", text: "Visa kalendern" },
     { href: "/dashboard", title: "Översikt", text: "Din översikt" },
     { href: "/wishlist", title: "Önskelistor", text: "Dina önskelistor" }
   ];
@@ -11,13 +17,24 @@ export default function Home() {
   return (
     <main className="min-h-screen grid place-items-center p-8">
       <section className="w-full max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-6">
-        Välkommen till <span className="text-indigo-600">WishTogether</span>
-      </h1>
-      <p className="text-lg text-gray-600 max-w-2xl mb-8">
-        Den smarta önskeliste-planeraren 🎁  
-        Skapa egna listor, dela med vänner och familj, se andras listor och kryssa i det du köpt – så slipper ni dubbletter.
-      </p>
+        <h1 className="text-4xl md:text-5xl text-slate-800 mb-6">
+          <span className={`${parisienne.className}`}>
+            WishList
+          </span>
+         
+        </h1> 
+        
+        <p className="mt-2 text-md text-slate-500 italic font-light tracking-wide">
+          Önskelistor utan krångel.
+        </p>
+        
+        <p className="text-lg text-slate-600 max-w-2xl mb-8">
+          Gör presentplaneringen enkel 🎁  
+          Med WishList samlar du alla dina önskelistor på ett ställe – snyggt, smidigt och delbart.  
+          Dela med familj och vänner, kryssa av det som är köpt och undvik dubbelköp.  
+          Enklare kan det inte bli!
+        </p>
+
         <div className="grid gap-6 sm:grid-cols-3">
           {cards.map(c => (
             <Link key={c.href} href={c.href}
