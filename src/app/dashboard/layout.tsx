@@ -1,53 +1,57 @@
-import Link from "next/link"
-import { getUser } from "@/lib/data"
-import { UserName } from "@/components/user-name"
+import Link from "next/link";
+import { getUser } from "@/lib/data";
+import { UserName } from "@/components/user-name";
+import DashboardNav from "@/components/dashboard-nav";
+import MobileNav from "@/components/mobile-nav";
+import { Search } from "lucide-react";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  const user = await getUser("1") // fejk tills vidare
+  const user = await getUser("1"); // fejk tills vidare
 
   return (
-    <div className="min-h-screen grid md:grid-cols-[220px,1fr] bg-gray-50">
+    <div className="min-h-screen grid md:grid-cols-[240px,1fr] bg-gray-50">
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col border-r bg-white">
-        <div className="p-5 font-bold text-lg border-b">Dashboard</div>
-        <nav className="flex-1 px-3 py-4 space-y-1 text-sm">
-          <NavItem href="/dashboard">Översikt</NavItem>
-          <NavItem href="/wishlist">Önskelistor</NavItem>
-          <NavItem href="/calendar">Kalender & Påminnelser</NavItem>
-          <NavItem href="/blog">Blogg</NavItem>
-        </nav>
+        <div className="p-5 text-lg font-semibold text-gray-800 border-b">Dashboard</div>
+        <DashboardNav />
       </aside>
 
       {/* Main */}
       <div className="flex flex-col">
         {/* Header */}
         <header className="sticky top-0 z-10 bg-white/70 backdrop-blur border-b">
-          <div className="px-5 py-3 flex items-center gap-3">
-            <h1 className="text-lg font-semibold">Välkommen tillbaka 👋</h1>
-            <div className="ml-auto flex items-center gap-4">
-              <input
-                placeholder="Sök…"
-                className="border rounded-xl px-3 py-1.5 text-sm"
-              />
+          <div className="px-4 md:px-6 py-3 flex items-center gap-3">
+            {/* Mobile menu */}
+            <div className="md:hidden">
+              <MobileNav />
+            </div>
+
+            <h1 className="text-base md:text-lg font-semibold text-gray-800">Välkommen tillbaka 👋</h1>
+
+            {/* Search */}
+            <div className="ml-auto w-full max-w-xs">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                  placeholder="Sök…"
+                  className="w-full border border-gray-300 rounded-xl pl-9 pr-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+
+            {/* User */}
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 grid place-items-center text-sm font-medium">
+                {user.name?.[0]?.toUpperCase() ?? "U"}
+              </span>
               <UserName user={user.name} />
             </div>
           </div>
         </header>
 
         {/* Content */}
-        <main className="p-6">{children}</main>
+        <main className="p-4 md:p-6">{children}</main>
       </div>
     </div>
-  )
-}
-
-function NavItem({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <Link
-      href={href}
-      className="block px-3 py-2 rounded-xl hover:bg-gray-100 transition"
-    >
-      {children}
-    </Link>
-  )
+  );
 }
