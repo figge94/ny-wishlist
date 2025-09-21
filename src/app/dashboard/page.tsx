@@ -19,7 +19,7 @@ export default function DashboardPage() {
   const cards = [
     { href: "/dashboard", title: "Översikt", text: "Din översikt" },
     {
-      href: "/dashboard/wishlist",
+      href: "/wishlist",
       title: "Önskelistor",
       text: "Dina önskelistor"
     },
@@ -49,12 +49,9 @@ export default function DashboardPage() {
           <Link
             key={c.href}
             href={c.href}
-            className="rounded-2xl border bg-white p-6 shadow hover:shadow-lg hover:-translate-y-0.5 transition">
+            className="rounded-2xl  bg-white/70 p-6 shadow hover:shadow-lg hover:-translate-y-0.5 transition">
             <h2 className="text-lg font-semibold">{c.title}</h2>
             <p className="text-sm text-gray-600">{c.text}</p>
-            <span className="inline-block mt-4 rounded-full bg-blue-400 text-white px-4 py-1.5 text-sm">
-              Öppna
-            </span>
           </Link>
         ))}
       </section>
@@ -65,8 +62,8 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold">Senaste aktiviteter</h2>
             <Link
-              href="/dashboard/wishlist"
-              className="text-blue-600 text-sm hover:underline">
+              href="/wishlist"
+              className="text-sky-500 text-sm hover:underline">
               Visa alla
             </Link>
           </div>
@@ -81,8 +78,8 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <Link
-                  href="/dashboard/wishlist"
-                  className="text-sm text-blue-600 hover:underline">
+                  href="/wishlist"
+                  className="text-sm text-sky-500 hover:underline">
                   Öppna
                 </Link>
               </li>

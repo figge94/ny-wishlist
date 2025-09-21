@@ -44,14 +44,14 @@ export default function Navbar() {
                   href={l.href}
                   aria-current={active ? "page" : undefined}
                   className={cx(
-                    "relative text-sm text-gray-700 hover:text-gray-900 transition",
-                    active && "text-gray-900"
+                    "relative text-sm text-slate-700 hover:text-slate-900 transition",
+                    active && "text-slate-900"
                   )}>
                   {l.label}
                   {/* underline animation */}
                   <span
                     className={cx(
-                      "absolute -bottom-1 left-0 h-0.5 w-0 bg-indigo-600 transition-all",
+                      "absolute -bottom-1 left-0 h-0.5 w-0 bg-violet-600 transition-all",
                       active ? "w-full" : "group-hover:w-full"
                     )}
                   />
@@ -78,7 +78,7 @@ export default function Navbar() {
           <button
             onClick={() => setOpen((o) => !o)}
             aria-label="Öppna meny"
-            className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100">
+            className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100  cursor-pointer">
             {/* enkel hamburger/close */}
             <svg
               className={cx("h-6 w-6", open && "hidden")}
@@ -115,7 +115,7 @@ export default function Navbar() {
                     href={l.href}
                     onClick={() => setOpen(false)}
                     className={cx(
-                      "block rounded-lg px-3 py-2 text-base",
+                      "block rounded-md px-3 py-2 text-base cursor-pointer",
                       active
                         ? "bg-indigo-50 text-indigo-700"
                         : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -130,13 +130,13 @@ export default function Navbar() {
               <Link
                 href="/login"
                 onClick={() => setOpen(false)}
-                className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-center text-sm">
+                className="flex-1 rounded-md border bg-slate-50 border-slate-100 px-3 py-2 text-center shadow-sm text-sm text-gray-700 hover:bg-slate-100">
                 Logga in
               </Link>
               <Link
                 href="/signup"
                 onClick={() => setOpen(false)}
-                className="flex-1 rounded-lg bg-indigo-600 px-3 py-2 text-center text-sm text-white">
+                className="flex-1 rounded-md bg-slate-600 px-3 py-2 text-center text-sm text-white  hover:bg-slate-700 shadow-sm">
                 Skapa konto
               </Link>
             </div>

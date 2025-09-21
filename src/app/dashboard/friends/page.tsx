@@ -52,20 +52,22 @@ export default function FriendsPage() {
     <div className="space-y-8">
       <BackToDashboard />
       <div className="flex items-center gap-3">
-        <h1 className="text-xl font-semibold text-gray-800">Vänner</h1>
+        <h1 className="text-xl font-semibold text-slate-800">Vänner</h1>
         <div className="ml-auto w-full max-w-xs">
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Sök vän…"
-            className="w-full border border-gray-300 rounded-full px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+            className="w-full border border-slate-300 rounded-md  inset-shadow-sm px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 bg-white"
           />
         </div>
       </div>
 
       {/* Dina vänner */}
       <section>
-        <h2 className="text-sm font-medium text-gray-700 mb-3">Dina vänner</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">
+          Dina vänner
+        </h2>
         {filtered.length === 0 ? (
           <p className="text-sm text-gray-500">
             Inga vänner matchar din sökning.
@@ -75,19 +77,20 @@ export default function FriendsPage() {
             {filtered.map((f) => (
               <li
                 key={f.id}
-                className="flex items-center gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
-                <div className="h-9 w-9 rounded-full bg-sky-200 text-sky-800 grid place-items-center text-sm font-medium">
+                className="flex items-center gap-3 rounded-md border border-slate-100 bg-white p-3 shadow-sm">
+                <div className="h-9 w-9 rounded-md bg-sky-200 text-sky-800 grid place-items-center text-sm font-medium">
                   {f.name[0]}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-800 truncate">
+                  <p className="text-sm font-bold text-slate-800 truncate">
                     {f.name}
                   </p>
-                  <p className="text-xs text-gray-500 truncate">{f.email}</p>
+                  <p className="text-xs text-slate-500 truncate">{f.email}</p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => removeFriend(f.id)}
-                  className="ml-auto text-xs text-red-600 hover:underline">
+                  className="ml-auto text-xs text-rose-600 cursor-pointer hover:underline hover:underline-offset-4">
                   Ta bort
                 </button>
               </li>
@@ -98,7 +101,7 @@ export default function FriendsPage() {
 
       {/* Förfrågningar */}
       <section>
-        <h2 className="text-sm font-medium text-gray-700 mb-3">
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">
           Vänförfrågningar
         </h2>
         {requests.length === 0 ? (
@@ -113,20 +116,22 @@ export default function FriendsPage() {
                   {r.name[0]}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-gray-800 truncate">
+                  <p className="text-sm font-semibold text-gray-800 truncate">
                     {r.name}
                   </p>
                   <p className="text-xs text-gray-500 truncate">{r.email}</p>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
                   <button
+                    type="button"
                     onClick={() => accept(r.id)}
-                    className="text-xs text-white bg-indigo-600 px-3 py-2 rounded-full hover:bg-indigo-700">
+                    className="text-sm text-white bg-teal-600 border border-teal-600 shadow-sm cursor-pointer px-4 py-2 rounded-md hover:bg-teal-700">
                     Acceptera
                   </button>
                   <button
+                    type="button"
                     onClick={() => decline(r.id)}
-                    className="text-xs text-gray-700 border border-gray-300 px-3 py-2 rounded-full hover:bg-gray-100">
+                    className="text-sm text-white bg-rose-600 border border-rose-600 shadow-sm cursor-pointer px-4 py-2 rounded-md hover:bg-rose-500">
                     Avböj
                   </button>
                 </div>
@@ -137,22 +142,26 @@ export default function FriendsPage() {
       </section>
 
       {/* Bjud in */}
-      <section className="rounded-2xl shadow-sm bg-white p-4">
-        <h2 className="text-sm font-medium text-gray-700">Bjud in vän</h2>
+      <section className="rounded-md shadow-sm bg-white p-4">
+        <h2 className="text-sm font-semibold text-gray-700">Bjud in vän</h2>
         <form
           onSubmit={invite}
           className="mt-3 flex flex-col sm:flex-row gap-2">
-          <input
-            type="email"
-            required
-            value={inviteEmail}
-            onChange={(e) => setInviteEmail(e.target.value)}
-            placeholder="namn@exempel.se"
-            className="flex-1 border border-gray-300 rounded-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-          <button className="rounded-full bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-700">
-            Skicka inbjudan
-          </button>
+          <div className=" flex-1 flex">
+            <input
+              type="email"
+              required
+              value={inviteEmail}
+              onChange={(e) => setInviteEmail(e.target.value)}
+              placeholder="namn@exempel.se"
+              className="flex-1 border border-gray-200 rounded-s-md inset-shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500"
+            />
+            <button
+              type="button"
+              className=" bg-amber-400 text-white rounded-e-md px-4 py-2 text-sm cursor-pointer hover:bg-amber-300">
+              Skicka inbjudan
+            </button>
+          </div>
         </form>
       </section>
     </div>

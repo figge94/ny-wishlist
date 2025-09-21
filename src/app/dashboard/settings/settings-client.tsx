@@ -20,10 +20,11 @@ export default function SettingsClient({ user }: Props) {
           { k: "notifications", label: "Notiser" }
         ].map((t) => (
           <button
+            type="button"
             key={t.k}
             onClick={() => setTab(t.k as any)}
             className={[
-              "rounded-full px-4 py-1 text-sm border",
+              "rounded-full px-4 py-1 text-sm border border-b-2 transition",
               tab === t.k
                 ? "bg-indigo-50 border-indigo-200 text-indigo-700"
                 : "bg-white border-gray-300 text-gray-700 hover:bg-gray-100"
@@ -51,25 +52,31 @@ function ProfileForm({ user }: Props) {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl border border-slate-200 bg-white p-4 space-y-4 max-w-lg shadow-sm">
+      className="rounded-md border border-slate-200 bg-white p-5 space-y-4 max-w-md shadow-sm">
       <div>
-        <label className="block text-sm text-gray-700">Namn</label>
+        <label className="block text-sm text-gray-700 font-semibold">
+          Namn
+        </label>
         <input
           name="name"
           defaultValue={user.name ?? ""}
-          className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="mt-1 w-full border border-gray-200 inset-shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
       </div>
       <div>
-        <label className="block text-sm text-gray-700">E-post</label>
+        <label className="block text-sm text-gray-700 font-semibold">
+          E-post
+        </label>
         <input
           name="email"
           type="email"
           defaultValue={user.email ?? ""}
-          className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="mt-1 w-full border border-gray-200 inset-shadow-sm rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
       </div>
-      <button className="rounded-xl bg-slate-600 text-white px-4 py-2 text-sm hover:bg-slate-700">
+      <button
+        type="button"
+        className="rounded-md bg-slate-600 text-white px-4 py-2 text-sm hover:bg-slate-700 cursor-pointer">
         Spara
       </button>
     </form>
@@ -90,7 +97,7 @@ function SecurityForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl border border-slate-200 bg-white p-4 space-y-4 max-w-lg shadow-sm">
+      className="rounded-md border border-slate-200 bg-white p-5 space-y-4 max-w-md shadow-sm">
       <div>
         <label className="block text-sm text-gray-700">
           Nuvarande lösenord
@@ -98,7 +105,7 @@ function SecurityForm() {
         <input
           name="currentPassword"
           type="password"
-          className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm"
+          className="mt-1 w-full border border-gray-200 rounded-md px-3 py-2 text-sm inset-shadow-sm"
         />
       </div>
       <div>
@@ -106,7 +113,7 @@ function SecurityForm() {
         <input
           name="newPassword"
           type="password"
-          className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm"
+          className="mt-1 w-full border border-gray-200 rounded-md px-3 py-2 text-sm inset-shadow-sm"
         />
       </div>
       <div>
@@ -116,19 +123,21 @@ function SecurityForm() {
         <input
           name="confirm"
           type="password"
-          className="mt-1 w-full border border-gray-300 rounded-xl px-3 py-2 text-sm"
+          className="mt-1 w-full border border-gray-200 rounded-md px-3 py-2 text-sm inset-shadow-sm"
         />
       </div>
       <div className="flex items-center justify-between">
         <label className="inline-flex items-center gap-2 text-sm text-gray-700">
           <input
             type="checkbox"
-            className="rounded border-gray-300"
+            className="w-4 h-4 border-gray-200 cursor-pointer rounded-full accent-zinc-600"
             name="twofa"
           />
           Aktivera 2FA (placeholder)
         </label>
-        <button className="rounded-xl bg-slate-600 text-white px-4 py-2 text-sm hover:bg-slate-700">
+        <button
+          type="button"
+          className="rounded-md bg-slate-700 text-white px-4 py-2 text-sm hover:bg-slate-600 shadow-sm cursor-pointer">
           Spara
         </button>
       </div>
@@ -145,7 +154,7 @@ function NotificationsForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="rounded-2xl border border-slate-200 bg-white p-4 space-y-4 max-w-lg shadow-sm">
+      className="rounded-md border border-slate-200 bg-white p-5 space-y-4 max-w-md shadow-sm">
       <Toggle
         name="emailInvites"
         label="Maila mig vid inbjudningar"
@@ -158,7 +167,9 @@ function NotificationsForm() {
         defaultChecked
       />
       <div>
-        <button className="rounded-xl bg-slate-600 text-white px-4 py-2 text-sm hover:bg-slate-700">
+        <button
+          type="button"
+          className="rounded-md bg-slate-700 text-white px-4 py-2 text-sm hover:bg-slate-600 cursor-pointer">
           Spara
         </button>
       </div>
@@ -182,7 +193,7 @@ function Toggle({
         type="checkbox"
         name={name}
         defaultChecked={defaultChecked}
-        className="h-5 w-9 rounded-full accent-slate-500"
+        className="h-4 w-4 rounded-full accent-slate-500 cursor-pointer"
       />
     </label>
   );

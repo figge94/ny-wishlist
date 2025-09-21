@@ -19,14 +19,15 @@ export default function MobileNav() {
   return (
     <div className="relative">
       <button
+        type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label="Öppna meny"
-        className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100">
+        className="inline-flex items-center justify-center rounded-md p-2 text-gray-800 hover:bg-gray-200 cursor-pointer">
         {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>
 
       {open && (
-        <div className="absolute left-0 mt-2 w-56 rounded-xl border bg-white shadow-lg p-2">
+        <div className="absolute left-0 mt-1 w-56 rounded-md border border-gray-200 bg-white drop-shadow-md p-1">
           {items.map((it) => {
             const active =
               pathname === it.href || pathname.startsWith(it.href + "/");
@@ -36,9 +37,9 @@ export default function MobileNav() {
                 href={it.href}
                 onClick={() => setOpen(false)}
                 className={[
-                  "block rounded-lg px-3 py-2 text-sm",
+                  "block px-3 py-2 text-sm",
                   active
-                    ? "bg-indigo-50 text-indigo-700"
+                    ? "bg-sky-50 text-sky-700"
                     : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 ].join(" ")}>
                 {it.label}
