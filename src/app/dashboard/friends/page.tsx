@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import BackToDashboard from "@/components/back-to-dashboard";
+import BackToDashboard from "@/components/BackToDashboard";
 
 type Friend = { id: string; name: string; email: string };
 

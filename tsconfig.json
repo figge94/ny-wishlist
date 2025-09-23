@@ -14,8 +14,6 @@
     "jsx": "preserve",
     "incremental": true,
     "plugins": [{ "name": "next" }],
-
-    // 🔑 viktigt för alias
     "baseUrl": "src",
     "paths": { "@/*": ["*"] }
   },

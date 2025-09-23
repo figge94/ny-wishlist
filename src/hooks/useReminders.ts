@@ -1,8 +1,8 @@
 // hooks/useReminders.ts
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { addDays, stripTime, toDate } from "@/lib/date";
-import type { Reminder } from "@/lib/types";
-import { loadReminders, saveReminders, seedReminders } from "@/lib/storage";
+import { addDays, stripTime, toDate } from "@/lib";
+import type { Reminder } from "@/lib";
+import { loadReminders, saveReminders, seedReminders } from "@/lib";
 
 type Filter = "upcoming" | "all" | "done";
 const UI_KEY = "reminders:UI:v1"; // för filter + selectedDate
@@ -85,7 +85,14 @@ export function useReminders() {
       globalThis.crypto
         ?.getRandomValues?.(new Uint32Array(1))[0]
         ?.toString(36) ?? Math.random().toString(36).slice(2, 10);
-    setItems((prev) => [{ id, done: false, ...data }, ...prev]);
+    const newReminder: Reminder = {
+      id,
+      done: false,
+      ...data,
+      title: "",
+      dueAt: ""
+    };
+    setItems((prev) => [newReminder, ...prev]);
   }, []);
 
   const toggleDone = useCallback((id: string, v: boolean) => {

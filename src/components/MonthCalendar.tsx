@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import React, { useEffect, useMemo, useState } from "react";
-import type { Reminder } from "@/lib/types";
+import type { Reminder } from "@/lib";
 import { toIso } from "@/lib/date";
 
 const MONTHS_SV = [

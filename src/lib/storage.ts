@@ -1,4 +1,4 @@
-import { Reminder } from "./types";
+import { Reminder } from "@/lib";
 
 const LS_KEY = "reminders:v1";
 
@@ -20,13 +20,15 @@ export function seedReminders(todayIso: string): Reminder[] {
       title: "Köp present – Anna",
       date: todayIso,
       time: "18:00",
-      list: "Födelsedag"
+      list: "Födelsedag",
+      dueAt: ""
     },
     {
       id: cryptoRandom(),
       title: "Beställ hoodie",
       date: addDays(todayIso, 2),
-      list: "Min första lista"
+      list: "Min första lista",
+      dueAt: ""
     }
   ];
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Parisienne } from "next/font/google";
+import { glass } from "@/lib";
 
 const parisienne = Parisienne({
   subsets: ["latin"],
@@ -12,9 +13,6 @@ export default function Home() {
     { href: "/dashboard", title: "Översikt", text: "Din översikt" },
     { href: "/wishlist", title: "Önskelistor", text: "Dina önskelistor" }
   ];
-
-  const glass =
-    "backdrop-blur-lg bg-white/90 border border-white/30 drop-shadow-md shadow-black/40";
 
   return (
     <main className="min-h-screen relative overflow-hidden">

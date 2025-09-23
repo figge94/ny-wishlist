@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Reminder } from "@/lib/types";
+import { Reminder } from "@/lib";
 
 export function NewReminderForm({
   onCreate

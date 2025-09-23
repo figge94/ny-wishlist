@@ -1,6 +1,6 @@
-import { getUser } from "@/lib/data";
-import BackToDashboard from "@/components/back-to-dashboard";
-import SettingsClient from "./settings-client";
+import { getUser } from "@/lib";
+import BackToDashboard from "@/components/BackToDashboard";
+import SettingsClient from "./SettingsClient";
 
 export default async function SettingsPage() {
   const user = await getUser("1");
