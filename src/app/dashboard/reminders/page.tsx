@@ -40,37 +40,37 @@ export default function RemindersPage() {
     .sort((a, b) => a.dueAt.localeCompare(b.dueAt));
 
   return (
-    <section className="mx-auto max-w-5xl space-y-6 px-4 py-8 ">
+    <section className="mx-auto max-w-5xl space-y-5 px-4 py-5 sm:px-6 lg:px-8 lg:py-6">
       <header className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Påminnelser</h1>
         <Link
           href="/dashboard"
-          className="text-sm text-blue-600 hover:underline">
+          className="text-sm text-blue-600 hover:underline hover:underline-offset-4">
           Till översikten
         </Link>
       </header>
 
       {/* Lista */}
-      <div className="rounded-md border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-neutral-900">
+      <div className="rounded-md border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-neutral-900 sm:px-6 lg:px-8">
         {reminders.length ? (
           <ul className="divide-y divide-zinc-300">
             {reminders.map((r) => (
               <li
                 key={r.id}
-                className="py-3 flex items-center justify-between gap-3">
+                className="py-3 flex items-center justify-between gap-3 sm:py-4 lg:py-5">
                 <div className="min-w-0">
                   <div className="font-medium truncate">{r.title}</div>
                   <div className="text-xs text-gray-500">{fmt(r.dueAt)}</div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
                   {/* status-chip */}
                   <span
                     className={[
                       "rounded-full px-3 py-1 text-xs ring-1 ring-inset",
                       r.done
                         ? "bg-green-100 text-green-800 ring-green-200"
-                        : "bg-amber-100 text-amber-800 ring-amber-200"
+                        : "bg-violet-100 text-violet-800 ring-violet-200"
                     ].join(" ")}>
                     {r.done ? "Klar" : "Planerad"}
                   </span>
@@ -84,7 +84,7 @@ export default function RemindersPage() {
                     />
                     <button
                       type="submit"
-                      className="rounded-sm backdrop-blur-md shadow-lg bg-zinc-50 border border-zinc-100 px-3 py-1.5 text-xs hover:bg-gray-100 cursor-pointer">
+                      className="rounded-sm backdrop-blur-md shadow-lg bg-zinc-50 border border-zinc-100 px-3 py-1.5 text-xs hover:bg-gray-100 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-600">
                       {r.done ? "Markera som planerad" : "Markera som klar"}
                     </button>
                   </form>

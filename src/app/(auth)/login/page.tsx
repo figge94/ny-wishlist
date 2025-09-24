@@ -36,7 +36,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen grid place-items-center px-4 py-12">
+    <main className="grid place-items-center px-4 py-12">
       <div className="w-full max-w-md bg-white rounded-2xl drop-shadow-sm p-8">
         <h1
           className={`text-3xl text-slate-600 text-center ${parisienne.className}`}>

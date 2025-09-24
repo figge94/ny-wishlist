@@ -33,28 +33,28 @@ export function NewReminderForm({
       <input
         name="title"
         placeholder="Titel (t.ex. köp present)"
-        className="rounded-sm text-slate-800 border border-slate-300 px-3 py-2 bg-white inset-shadow-sm inset-shadow-stone-200 text-sm focus-visible:ring-2 focus-visible:ring-slate-400"
+        className="rounded-sm text-slate-800 border border-violet-200 px-3 py-2 bg-white inset-shadow-sm inset-shadow-violet-300/50 text-sm focus-visible:ring-violet-600 focus-visible:ring-3"
       />
       <div className="grid grid-cols-2 gap-3">
         <input
           name="date"
           type="date"
-          className="rounded-sm border text-slate-800 border-slate-300 px-3 py-2 bg-white inset-shadow-sm inset-shadow-stone-200 text-sm focus-visible:ring-2 focus:ring-slate-400"
+          className="rounded-sm border text-slate-800 border-violet-200 px-3 py-2 bg-white inset-shadow-sm inset-shadow-violet-300/50 text-sm focus-visible:ring-violet-600 focus-visible:ring-3"
         />
         <input
           name="time"
           type="time"
-          className="rounded-sm border text-slate-800 border-slate-300 px-3 py-2 bg-white inset-shadow-sm inset-shadow-stone-200 text-sm focus-visible:ring-2 focus:ring-slate-400"
+          className="rounded-sm border text-slate-800 border-violet-200 px-3 py-2 bg-white inset-shadow-sm inset-shadow-violet-300/50 text-sm focus-visible:ring-violet-600 focus-visible:ring-3"
         />
       </div>
       <input
         name="list"
         placeholder="Koppla påminnelse till lista (valfritt) "
-        className="rounded-sm border text-slate-800 border-slate-300 bg-white px-3 py-2 inset-shadow-sm inset-shadow-stone-200 text-sm focus-visible:ring-2 focus:ring-slate-400"
+        className="rounded-sm border text-slate-800 border-violet-200 bg-white px-3 py-2 inset-shadow-sm inset-shadow-violet-300/50 text-sm focus-visible:ring-violet-600 focus-visible:ring-3"
       />
       <button
         type="button"
-        className="bg-violet-600/80 text-white rounded px-3 py-3 uppercase text-sm font-semibold hover:bg-violet-600 transition cursor-pointer">
+        className="bg-violet-600/80 text-white rounded-md px-3 py-2.5 uppercase text-sm font-semibold hover:bg-violet-600 transition cursor-pointer shadow-md shadow-violet-500/50 hover:shadow-violet-500/40 active:scale-95">
         Lägg till
       </button>
     </form>
