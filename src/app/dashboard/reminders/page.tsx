@@ -40,7 +40,7 @@ export default function RemindersPage() {
     .sort((a, b) => a.dueAt.localeCompare(b.dueAt));
 
   return (
-    <section className="mx-auto max-w-4xl space-y-6 px-4 py-8 ">
+    <section className="mx-auto max-w-5xl space-y-6 px-4 py-8 ">
       <header className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Påminnelser</h1>
         <Link
@@ -53,7 +53,7 @@ export default function RemindersPage() {
       {/* Lista */}
       <div className="rounded-md border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-neutral-900">
         {reminders.length ? (
-          <ul className="divide-y">
+          <ul className="divide-y divide-zinc-300">
             {reminders.map((r) => (
               <li
                 key={r.id}
@@ -69,8 +69,8 @@ export default function RemindersPage() {
                     className={[
                       "rounded-full px-3 py-1 text-xs ring-1 ring-inset",
                       r.done
-                        ? "bg-green-50 text-green-700 ring-green-200"
-                        : "bg-amber-50 text-amber-700 ring-amber-200"
+                        ? "bg-green-100 text-green-800 ring-green-200"
+                        : "bg-amber-100 text-amber-800 ring-amber-200"
                     ].join(" ")}>
                     {r.done ? "Klar" : "Planerad"}
                   </span>
@@ -84,7 +84,7 @@ export default function RemindersPage() {
                     />
                     <button
                       type="submit"
-                      className="rounded-md border px-2 py-1 text-xs hover:bg-gray-50">
+                      className="rounded-sm backdrop-blur-md shadow-lg bg-zinc-50 border border-zinc-100 px-3 py-1.5 text-xs hover:bg-gray-100 cursor-pointer">
                       {r.done ? "Markera som planerad" : "Markera som klar"}
                     </button>
                   </form>
@@ -93,7 +93,7 @@ export default function RemindersPage() {
                     <input type="hidden" name="id" value={r.id} />
                     <button
                       type="submit"
-                      className="rounded-md border border-red-200 text-red-700 px-2 py-1 text-xs hover:bg-red-50"
+                      className="rounded-sm backdrop-blur-lg shadow-lg border border-rose-600 bg-rose-500 text-white px-3 py-1.5 text-xs hover:bg-rose-400 hover:border-rose-400 cursor-pointer"
                       formAction={deleteReminder}>
                       Ta bort
                     </button>
