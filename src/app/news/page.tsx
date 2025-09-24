@@ -60,12 +60,12 @@ export default function NewsPage() {
 
               <ul className="space-y-10">
                 {byYear[y].map((item, i) => {
-                  const leftSide = i % 2 === 0; // varannan sida på >= sm
+                  const leftSide = i % 2 === 0;
 
                   return (
                     <li
                       key={item.slug}
-                      className="relative grid grid-cols-1 sm:grid-cols-[1fr,3rem,1fr] gap-4">
+                      className="relative grid grid-cols-1 sm:grid-cols-[1fr,3rem,1fr] gap-2 sm:gap-6">
                       {/* Kort – placering vänster/höger på desktop, fullbredd på mobil */}
                       <Link
                         href={`/news/${item.slug}`}
@@ -82,7 +82,7 @@ export default function NewsPage() {
                       </Link>
 
                       {/* Mittkolumn – dot + datum-badge + pil (desktop) */}
-                      <div className="relative hidden sm:block sm:col-start-1/2">
+                      <div className="relative hidden sm:block sm:col-start-1/2 self-stretch">
                         {/* Dot exakt på linjen */}
                         <span
                           aria-hidden
@@ -93,8 +93,8 @@ export default function NewsPage() {
                           className={[
                             "absolute top-1 flex items-center gap-1.5",
                             leftSide
-                              ? "right-[calc(50%+1rem)]"
-                              : "left-[calc(50%+1rem)] flex-row-reverse text-right"
+                              ? "right-[calc(35%+2rem)]"
+                              : "left-[calc(56%+2rem)] flex-row-reverse text-right"
                           ].join(" ")}>
                           {/* Piltriangel (pekar mot dotten) */}
                           <span
