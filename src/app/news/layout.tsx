@@ -1,7 +1,7 @@
-export default function BlogLayout({
-  children,
+export default function NewsLayout({
+  children
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return <section>{children}</section>
+  return <section>{children}</section>;
 }

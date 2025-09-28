@@ -5,23 +5,27 @@ import type { Metadata } from "next";
 import { getNewsBySlug, getAllSlugs } from "@/lib/news";
 import ShareButton from "@/components/ShareButton";
 
-type Props = { params: { slug: string } };
+type Params = { slug: string };
 
-export async function generateStaticParams() {
-  // getAllSlugs() bör returnera: [{ slug: "vanner" }, ...]
+export async function generateStaticParams(): Promise<Params[]> {
+  // getAllSlugs() ska returnera [{ slug: "vanner" }, ...]
   return getAllSlugs();
 }
 
-function formatFullDate(date: string) {
-  return new Date(date).toLocaleDateString("sv-SE", {
+const formatFullDate = (date: string) =>
+  new Date(date).toLocaleDateString("sv-SE", {
     year: "numeric",
     month: "long",
     day: "numeric"
   });
-}
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const item = getNewsBySlug(params.slug);
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const item = getNewsBySlug(slug);
   if (!item) return { title: "Nyhet saknas" };
 
   const dateStr = formatFullDate(item.date);
@@ -36,25 +40,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: desc,
       publishedTime: item.date
     },
-    twitter: {
-      card: "summary",
-      title: item.title,
-      description: desc
-    }
+    twitter: { card: "summary", title: item.title, description: desc }
   };
 }
 
-export default function NewsDetailPage({ params }: Props) {
-  const item = getNewsBySlug(params.slug);
+export default async function NewsDetailPage({
+  params
+}: {
+  params: Promise<Params>;
+}) {
+  const { slug } = await params;
+  const item = getNewsBySlug(slug);
   if (!item) return notFound();
 
   return (
     <main className="px-4 py-8 sm:px-6 lg:px-8">
-      {/* Breadcrumbs */}
       <nav aria-label="Brödsmulor" className="mb-6 text-sm text-gray-600">
         <ol className="flex items-center">
           <li>
-            <Link href="/news" className="text-blue-600 hover:underline">
+            <Link
+              href="/news"
+              className="text-sky-400 hover:underline hover:underline-offset-4">
               Nyheter
             </Link>
           </li>
@@ -65,11 +71,10 @@ export default function NewsDetailPage({ params }: Props) {
         </ol>
       </nav>
 
-      {/* Innehåll */}
-      <section className="mx-auto max-w-3xl">
-        <div className="rounded-2xl border bg-white shadow-sm p-6 dark:border-gray-800 dark:bg-neutral-900">
+      <section className="mx-auto max-w-5xl">
+        <div className="rounded-md bg-sky-50/50 drop-shadow-xs shadow p-6 dark:border-gray-800 dark:bg-neutral-900">
           <header>
-            <h1 className="text-2xl sm:text-3xl font-bold">{item.title}</h1>
+            <h1 className="text-2xl font-bold">{item.title}</h1>
             <p className="mt-1 text-sm text-gray-500">
               {formatFullDate(item.date)}
             </p>
@@ -82,8 +87,8 @@ export default function NewsDetailPage({ params }: Props) {
           <div className="mt-6 flex gap-3">
             <Link
               href="/news"
-              className="inline-flex items-center rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-neutral-800">
-              ← Till alla nyheter
+              className="inline-flex items-center rounded-sm bg-stone-950 text-white shadow px-3 py-1.5 text-sm hover:bg-stone-950/90 dark:border-gray-700 dark:hover:bg-neutral-800 active:scale-95 transition">
+              ← Tillbaka till tidslinjen
             </Link>
             <ShareButton title={item.title} />
           </div>

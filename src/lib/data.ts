@@ -6,5 +6,5 @@ export type AppUser = {
 
 export async function getUser(id: string): Promise<AppUser> {
   // fejk tills vidare
-  return { id, name: "Victoria", email: "victoria@hotmail.se" };
+  return { id, name: "Victoria", email: "victoriafingal@hotmail.se" };
 }

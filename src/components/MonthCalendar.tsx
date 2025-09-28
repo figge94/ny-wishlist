@@ -1,35 +1,28 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import React, { useEffect, useMemo, useState } from "react";
+import {
+  useCountsByDate,
+  useMonthCursor,
+  useCalendarGrid,
+  useMounted,
+  useTodayIso
+} from "@/hooks/calendar";
 import type { Reminder } from "@/lib";
-import { toIso } from "@/lib/date";
+import { month_sv } from "@/lib/date";
+import {
+  focusRing,
+  glassBase,
+  glassHover,
+  glassToday,
+  glassSelected,
+  glassBtnIcon
+} from "@/lib/styles";
 
-const MONTHS_SV = [
-  "januari",
-  "februari",
-  "mars",
-  "april",
-  "maj",
-  "juni",
-  "juli",
-  "augusti",
-  "september",
-  "oktober",
-  "november",
-  "december"
-];
-
-const focusRing =
-  "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60";
-
-const glassBase =
-  "backdrop-blur-md bg-white/10 border border-white/20 shadow-lg shadow-black/10 text-white";
-const glassHover = "hover:bg-white/30";
-const glassToday = "ring-2 ring-white/70";
-const glassSelected = "bg-blue-600/70 text-white border-blue-300/40";
-const glassBtn = `${glassBase} ${glassHover} text-white rounded-sm px-3 py-2 transition`;
-const glassBtnIcon = `${glassBtn} leading-none select-none`;
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
 
 export function MonthCalendar({
   items,
@@ -40,65 +33,38 @@ export function MonthCalendar({
   selectedDate: string | null;
   onPickDate: (iso: string) => void;
 }) {
-  const [mounted, setMounted] = useState(false);
-  const [cursor, setCursor] = useState(() => {
-    // initiera neutral (undvik server-klient-skillnad)
-    const d = new Date();
-    return new Date(d.getFullYear(), d.getMonth(), 1);
-  });
-
-  useEffect(() => setMounted(true), []);
-
-  // ❗ Viktigt: räkna detta bara efter mount så SSR/CSR matchar
-  const todayIso = useMemo(() => {
-    if (!mounted) return ""; // rendera utan “idag”-ring på SSR
-    const d = new Date();
-    return d.toISOString().slice(0, 10);
-  }, [mounted]);
-
-  const year = cursor.getFullYear();
-  const month = cursor.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const startWeekday = (firstDay.getDay() + 6) % 7; // måndag=0
-
-  const cells: Array<{ iso?: string; day?: number }> = [];
-  for (let i = 0; i < startWeekday; i++) cells.push({});
-  for (let d = 1; d <= daysInMonth; d++)
-    cells.push({ iso: toIso(year, month, d), day: d });
-
-  const countByDate = useMemo(() => {
-    return items.reduce<Record<string, number>>((acc, r) => {
-      acc[r.date] = (acc[r.date] || 0) + 1;
-      return acc;
-    }, {});
-  }, [items]);
+  const mounted = useMounted();
+  const { year, month, prev, next } = useMonthCursor();
+  const { cells } = useCalendarGrid(year, month);
+  const rows = chunk(cells, 7);
+  const todayIso = useTodayIso(mounted);
+  const countByDate = useCountsByDate(items, (r) => r.date);
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-3">
+      {/* Header */}
+      <div className="mb-3 flex items-center justify-between">
         <button
           type="button"
-          onClick={() => setCursor(new Date(year, month - 1, 1))}
+          onClick={prev}
           className={glassBtnIcon}
           aria-label="Föregående månad">
           ◀
         </button>
-
         <div className="font-medium text-white" suppressHydrationWarning>
-          {MONTHS_SV[month]} {year}
+          {month_sv[month]} {year}
         </div>
-
         <button
           type="button"
-          onClick={() => setCursor(new Date(year, month + 1, 1))}
+          onClick={next}
           className={glassBtnIcon}
           aria-label="Nästa månad">
           ▶
         </button>
       </div>
 
-      <div className="grid grid-cols-7 text-xs text-white/80 mb-1 select-none font-semibold">
+      {/* Veckodagar */}
+      <div className="mb-1 grid select-none grid-cols-7 text-xs font-medium text-white">
         {["MÅ", "TI", "ON", "TO", "FR", "LÖ", "SÖ"].map((w) => (
           <div key={w} className="p-1 text-center">
             {w}
@@ -106,36 +72,49 @@ export function MonthCalendar({
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1">
-        {cells.map((c, i) => {
-          const isToday = mounted && c.iso === todayIso;
-          const isSelected = !!selectedDate && c.iso === selectedDate;
-          const has = c.iso ? countByDate[c.iso] || 0 : 0;
+      {/* Datumgrid med ARIA */}
+      <div role="grid" aria-label="Kalender" className="grid gap-1">
+        {rows.map((row, rIdx) => (
+          <div key={rIdx} role="row" className="grid grid-cols-7 gap-1">
+            {row.map((c, i) => {
+              const isToday = mounted && c.iso === todayIso;
+              const isSelected = !!selectedDate && c.iso === selectedDate;
+              const has = c.iso ? countByDate[c.iso] || 0 : 0;
 
-          return (
-            <button
-              key={i}
-              type="button"
-              disabled={!c.iso}
-              onClick={() => c.iso && onPickDate(c.iso)}
-              className={[
-                "h-16 rounded-lg flex flex-col items-center justify-center transition",
-                c.iso
-                  ? `${glassBase} ${glassHover} ${focusRing}`
-                  : "opacity-0 cursor-default", // osynlig
-                isToday ? glassToday : "",
-                isSelected ? glassSelected : ""
-              ].join(" ")}
-              title={c.iso || ""}>
-              <span className="text-sm">{c.day ?? ""}</span>
-              {has > 0 && (
-                <span className="text-[10px] mt-1 px-1.5 py-0.5 rounded-full border border-white/30 bg-white/10 text-white/90 focus:ring-2 focus-visible:ring-white/80">
-                  {has}
-                </span>
-              )}
-            </button>
-          );
-        })}
+              return (
+                <div
+                  key={i}
+                  role="gridcell"
+                  tabIndex={c.iso ? 0 : -1}
+                  aria-selected={isSelected ? "true" : "false"}
+                  aria-disabled={c.iso ? "false" : "true"}
+                  aria-label={c.iso || undefined}
+                  onClick={() => c.iso && onPickDate(c.iso)}
+                  onKeyDown={(e) => {
+                    if ((e.key === "Enter" || e.key === " ") && c.iso) {
+                      e.preventDefault();
+                      onPickDate(c.iso);
+                    }
+                  }}
+                  className={[
+                    "h-16 rounded-md flex flex-col items-center justify-center transition",
+                    c.iso
+                      ? `${glassBase} ${glassHover} ${focusRing} cursor-pointer`
+                      : "opacity-0 cursor-default",
+                    isToday ? glassToday : "",
+                    isSelected ? glassSelected : ""
+                  ].join(" ")}>
+                  <span className="text-sm">{c.day ?? ""}</span>
+                  {has > 0 && (
+                    <span className="mt-1 rounded-full border bg-white/40 px-2 py-0.5 text-[12px] text-white/90">
+                      {has}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );

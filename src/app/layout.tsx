@@ -1,8 +1,27 @@
-import Link from "next/link";
+// app/layout.tsx
 import "./globals.css";
+import type { Metadata, Viewport } from "next";
+import { Lexend } from "next/font/google";
 import Navbar from "@/components/Navbar";
 
-export const metadata = { title: "WistList" };
+const lexend = Lexend({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["200", "300", "500"]
+});
+
+export const metadata: Metadata = {
+  title: "WishList",
+  description: "Önskelistor utan krångel.",
+  icons: { icon: "/favicon.ico" }
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" }
+  ]
+};
 
 export default function RootLayout({
   children
@@ -10,10 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="sv">
-      <body className="min-h-screen bg-gray-50">
+    <html
+      lang="sv"
+      className={lexend.className} // 👈 Här aktiveras Lexend globalt
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning>
+      <body
+        className="font-light min-h-screen bg-white text-slate-900 antialiased dark:bg-neutral-950 dark:text-white
+          selection:bg-violet-300/60 dark:selection:bg-violet-500/40">
         <Navbar />
-        <main className="max-w-5xl mx-auto p-6">{children}</main>
+        <main className="mx-auto max-w-5xl px-4 sm:px-6">{children}</main>
       </body>
     </html>
   );

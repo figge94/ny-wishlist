@@ -14,10 +14,7 @@ export default async function Layout({
   return (
     <div className="min-h-dvh grid md:grid-cols-[240px,1fr]">
       {/* Sidebar (md+) */}
-      <aside className="hidden md:flex flex-col border-r bg-white">
-        <div className="p-5 text-lg font-semibold text-slate-800 border-b border-gray-200">
-          Översikt
-        </div>
+      <aside className="hidden md:flex flex-col bg-white">
         <MobileNav variant="inline" className="p-3" />
       </aside>
 
@@ -31,7 +28,7 @@ export default async function Layout({
               <MobileNav />
             </div>
 
-            <h1 className="text-base md:text-lg font-semibold text-slate-800">
+            <h1 className="text-base md:text-lg font-medium text-slate-800">
               Översikt
             </h1>
 
@@ -41,17 +38,22 @@ export default async function Layout({
                 <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
                 <input
                   placeholder="Sök…"
-                  className="w-64 border border-zinc-200 rounded-md pl-9 pr-3 py-1.5 text-sm bg-white text-zinc-700 focus:outline-none focus:ring-2 focus:ring-slate-600"
+                  className="w-full border border-zinc-200 rounded-md pl-9 pr-3 py-2 text-sm inset-shadow-sm bg-white text-zinc-700 focus:outline-none focus:ring-2 focus:ring-slate-600"
                 />
               </div>
             </div>
 
             {/* User (dölj på xs) */}
             <div className="hidden sm:flex items-center gap-2">
-              <span className="h-8 w-8 rounded-full bg-sky-100 text-slate-900 grid place-items-center text-sm font-medium shadow">
+              <span className="h-9 w-9 rounded-full bg-slate-600 text-white grid place-items-center text-sm font-medium shadow">
                 {user.name?.[0]?.toUpperCase() ?? "U"}
               </span>
-              <UserName user={user.name} />
+              <div className="flex flex-col">
+                <span className="font-medium">{user.name}</span>
+                <span className="text-xs text-slate-500">
+                  {user.email ?? "Ingen e-post"}
+                </span>
+              </div>
             </div>
           </div>
 

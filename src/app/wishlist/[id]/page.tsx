@@ -17,12 +17,15 @@ async function addItemAction(formData: FormData) {
   redirect(`/wishlist/${id}`);
 }
 
+type Params = { id: string };
+
 export default async function WishlistDetailPage({
   params
 }: {
-  params: { id: string };
+  params: Promise<Params>;
 }) {
-  const wl = await api.getList(params.id);
+  const { id } = await params; // ← viktig ändring
+  const wl = await api.getList(id);
   if (!wl) return notFound();
 
   return (

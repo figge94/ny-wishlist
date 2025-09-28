@@ -1,3 +1,4 @@
+// /lib/date.ts
 export function toDate(d: string, t?: string) {
   return new Date(t ? `${d}T${t}:00` : `${d}T00:00:00`);
 }
@@ -23,3 +24,26 @@ export function toIso(y: number, m0: number, d: number) {
   const d2 = String(dt.getDate()).padStart(2, "0");
   return `${y2}-${m2}-${d2}`;
 }
+
+export function formatDate(date: string) {
+  return new Date(date).toLocaleDateString("sv-SE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+}
+
+export const month_sv = [
+  "januari",
+  "februari",
+  "mars",
+  "april",
+  "maj",
+  "juni",
+  "juli",
+  "augusti",
+  "september",
+  "oktober",
+  "november",
+  "december"
+];

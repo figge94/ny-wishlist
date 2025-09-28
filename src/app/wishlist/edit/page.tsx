@@ -12,7 +12,6 @@ async function updateAction(formData: FormData) {
   const description = String(formData.get("description") || "").trim();
   if (!id || !name) throw new Error("Id och namn krävs");
   await api.renameList(id, name);
-  // (sparar inte description i din fakeDB nu – lägg till fältet om du vill)
   revalidatePath("/wishlist");
   revalidatePath(`/wishlist/${id}`);
   redirect(`/wishlist/${id}`);
@@ -26,12 +25,15 @@ async function deleteAction(formData: FormData) {
   redirect("/wishlist");
 }
 
+type Params = { id: string };
+
 export default async function EditWishlistPage({
   params
 }: {
-  params: { id: string };
+  params: Promise<Params>;
 }) {
-  const wl = await api.getList(params.id);
+  const { id } = await params; // 👈 viktig ändring
+  const wl = await api.getList(id);
   if (!wl) redirect("/wishlist");
 
   return (

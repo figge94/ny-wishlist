@@ -4,18 +4,25 @@ import { Ban } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="mx-auto max-w-3xl flex flex-col items-center justify-center text-center py-20">
-      <h1 className="text-2xl font-bold mb-2">Listan hittades inte</h1>{" "}
-      <Ban className="w-12 h-12 text-rose-500 mb-4" />
-      <p className="text-gray-600 mb-6">
-        Ojdå! Vi kunde inte hitta den här önskelistan. Kontrollera länken eller
-        gå tillbaka till alla önskelistor.
-      </p>
-      <Link
-        href="/wishlist"
-        className="px-6 py-2 bg-black text-white rounded-md shadow-lg drop-shadow-2xl hover:bg-rose-600 transition hover:drop-shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-600">
-        Till önskelistor
-      </Link>
-    </div>
+    <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
+      <div className="text-center">
+        <p className="text-base font-semibold text-violet-400">404</p>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance text-gray-900 sm:text-6xl">
+          Listan hittades inte
+        </h1>{" "}
+        <Ban className="w-12 h-12 text-violet-500 mt-4 mx-auto" />
+        <p className="mt-6 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">
+          Ojdå! Vi kunde inte hitta den här önskelistan. Kontrollera länken
+          eller gå tillbaka till alla önskelistor.
+        </p>
+        <div className="mt-10 flex items-center justify-center gap-x-6">
+          <Link
+            href="/wishlist"
+            className="rounded-md bg-violet-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-violet-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            Till önskelistor
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 }

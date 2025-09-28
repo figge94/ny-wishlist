@@ -4,6 +4,7 @@ import { MonthCalendar } from "@/components/MonthCalendar";
 import { NewReminderForm } from "@/components/NewReminderForm";
 import { formatDateTime } from "@/lib/date";
 import { useReminders } from "@/hooks/useReminders";
+import { CalendarDaysIcon, ClockIcon } from "@heroicons/react/24/outline";
 
 function btn(active: boolean) {
   return [
@@ -35,7 +36,7 @@ export default function CalendarPage() {
   return (
     <div className="mx-auto max-w-6xl p-6 grid gap-6 md:grid-cols-1 lg:grid-cols-2">
       {/* Vänster: Kalender (glas ovan färgad bakgrund) */}
-      <section className="relative rounded-xl overflow-hidden shadow-2xl">
+      <section className="relative rounded-md overflow-hidden shadow-2xl">
         {/* färgad bakgrund för kontrast */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-400 via-fuchsia-300 to-violet-600" />
         {/* svag textur */}
@@ -53,7 +54,7 @@ export default function CalendarPage() {
               )}
           </header>
 
-          <div className="rounded-xl p-3 backdrop-blur-md bg-white/10 border border-white/20 shadow-lg">
+          <div className="rounded-md p-3 backdrop-blur-md bg-white/10 border border-white/20 drop-shadow-md">
             <MonthCalendar
               items={items}
               selectedDate={selectedDate}
@@ -65,9 +66,9 @@ export default function CalendarPage() {
             <button
               type="button"
               onClick={() => setSelectedDate(null)}
-              className="px-3 py-1.5 rounded-xl border text-white/90
-                  backdrop-blur-md bg-white/30 border-white/20 hover:bg-white/20
-                  focus:outline-none focus:ring-2 focus:ring-white/50 transition hover:cursor-pointer">
+              className="px-3 py-1.5 rounded-md border text-white/90
+                  backdrop-blur-md bg-white/30 border-white/30 hover:bg-black/20 hover:border-black/20  hover:text-black
+                  focus-visible:ring-offset-2 focus-visible:ring-2 focus-visible:ring-white/80 transition cursor-pointer">
               Rensa datumfilter
             </button>
           </div>
@@ -75,7 +76,7 @@ export default function CalendarPage() {
       </section>
 
       {/* Höger: Påminnelser (ljus kortlayout) */}
-      <section className="bg-white rounded-xl shadow-2xl p-6">
+      <section className="bg-white rounded-md drop-shadow-xl p-6">
         <header className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-black tracking-tight">
             Påminnelser
@@ -133,52 +134,64 @@ export default function CalendarPage() {
               {filtered.map((r) => (
                 <li
                   key={r.id}
-                  className="group rounded-lg border border-slate-200 bg-white p-3 shadow-sm hover:shadow-md transition">
+                  className="group rounded-md border border-slate-100 bg-white p-3 shadow hover:shadow-md transition">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={!!r.done}
                       onChange={(e) => toggleDone(r.id, e.target.checked)}
-                      className="h-5 w-5 border-slate-200 text-blue-600 focus:ring-blue-400"
+                      className="h-5 w-5 border border-slate-100 text-violet-600 focus:ring-violet-400"
                     />
+                    {/* Text och info */}
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-black">{r.title}</div>
-                      <div className="text-xs text-slate-500">
-                        {formatDateTime(r.date, r.time)}
-                        {r.list ? (
-                          <>
-                            {" "}
-                            Lista:{" "}
-                            <span className="flex flex-wrap italic">
-                              {r.list}
-                            </span>
-                          </>
-                        ) : null}
+                      {/* Datum */}
+                      <div className="text-xs text-slate-500 flex items-center gap-1">
+                        <CalendarDaysIcon className="size-4 text-slate-400 shrink-0" />
+                        <span>{formatDateTime(r.date)}</span>
                       </div>
+
+                      {/* Tid */}
+                      <div className="text-xs text-slate-500 flex items-center gap-1">
+                        <ClockIcon className="size-4 text-slate-400 shrink-0" />
+                        <span>{formatDateTime(r.time)}</span>
+                      </div>
+
+                      {/* Lista */}
+                      {r.list && (
+                        <div className="text-xs text-slate-500 flex items-center gap-1">
+                          <span className="italic">Lista:</span>
+                          <span className="flex flex-wrap italic">
+                            {r.list}
+                          </span>
+                        </div>
+                      )}
                     </div>
+
                     {!r.done && (
                       <div className="flex flex-col items-center gap-1">
-                        <p className="text-sm font-semibold cursor-pointer opacity-0 group-hover:opacity-100 transition">
+                        <p className="text-sm font-medium cursor-pointer opacity-0 group-hover:opacity-100 transition">
                           Snooza
                         </p>
                         <button
                           type="button"
                           onClick={() => snooze(r.id, 1)}
-                          className="text-sm rounded-sm bg-sky-200 w-20 h-8 hover:bg-sky-100 cursor-pointer opacity-0 group-hover:opacity-100 transition">
+                          className="text-sm rounded-sm bg-sky-200 w-20 h-6 hover:bg-sky-100 cursor-pointer opacity-0 group-hover:opacity-100 transition">
                           1 dag
                         </button>
                         <button
                           type="button"
                           onClick={() => snooze(r.id, 7)}
-                          className="text-sm rounded-sm bg-sky-200 w-20 h-8 hover:bg-sky-100 cursor-pointer opacity-0 group-hover:opacity-100 transition">
+                          className="text-sm rounded-sm bg-sky-200 w-20 h-6 hover:bg-sky-100 cursor-pointer opacity-0 group-hover:opacity-100 transition">
                           7 dagar
                         </button>
                       </div>
                     )}
+                    {/* Ta bort */}
                     <button
                       type="button"
                       onClick={() => removeReminder(r.id)}
-                      className="text-sm  rounded-sm bg-rose-600 hover:bg-rose-500 p-3 text-white cursor-pointer opacity-0 group-hover:opacity-100 transition">
+                      className="text-sm rounded-sm bg-rose-600 hover:bg-rose-500 px-3 py-2 text-white cursor-pointer opacity-0 group-hover:opacity-100 transition">
                       Ta bort
                     </button>
                   </div>

@@ -32,7 +32,7 @@ export default function ShareButton({ title }: { title: string }) {
     <button
       type="button"
       onClick={onShare}
-      className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700 disabled:opacity-50">
+      className="inline-flex items-center gap-2 rounded-sm bg-blue-600 shadow-sm px-3 py-1 text-sm text-white hover:bg-blue-700 disabled:opacity-50 cursor-pointer transition">
       Dela
     </button>
   );
