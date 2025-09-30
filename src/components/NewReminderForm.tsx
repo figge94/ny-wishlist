@@ -1,11 +1,12 @@
+// src/components/NewReminderForm.tsx
 "use client";
 import React from "react";
-import { Reminder } from "@/lib";
+import type { UiReminder } from "@/lib/storage"; // ⬅️ ändra hit
 
 export function NewReminderForm({
   onCreate
 }: {
-  onCreate: (r: Omit<Reminder, "id" | "done">) => void;
+  onCreate: (r: Omit<UiReminder, "id" | "done">) => void; // ⬅️ använd UI-typen
 }) {
   return (
     <form

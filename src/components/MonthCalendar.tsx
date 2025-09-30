@@ -7,7 +7,7 @@ import {
   useMounted,
   useTodayIso
 } from "@/hooks/calendar";
-import type { Reminder } from "@/lib";
+import type { UiReminder } from "@/lib/storage"; // ⬅️ använd din UI-typ
 import { month_sv } from "@/lib/date";
 import {
   focusRing,
@@ -29,7 +29,7 @@ export function MonthCalendar({
   selectedDate,
   onPickDate
 }: {
-  items: Reminder[];
+  items: UiReminder[]; // ⬅️ bytt från CalendarReminder
   selectedDate: string | null;
   onPickDate: (iso: string) => void;
 }) {
@@ -38,8 +38,9 @@ export function MonthCalendar({
   const { cells } = useCalendarGrid(year, month);
   const rows = chunk(cells, 7);
   const todayIso = useTodayIso(mounted);
-  const countByDate = useCountsByDate(items, (r) => r.date);
 
+  // UiReminder har redan YYYY-MM-DD i 'date'
+  const countByDate = useCountsByDate(items, (r) => r.date);
   return (
     <div>
       {/* Header */}

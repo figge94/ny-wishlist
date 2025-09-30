@@ -3,17 +3,11 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
+import { toCents } from "@/utils/currency";
 
 export const runtime = "nodejs";
 
 // Helpers
-function toCents(input: FormDataEntryValue | null): number | null {
-  if (!input) return null;
-  const n = Number(String(input).replace(",", "."));
-  if (Number.isNaN(n)) return null;
-  const cents = Math.round(n * 100);
-  return cents >= 0 ? cents : null;
-}
 function fmtPrice(cents?: number | null) {
   if (cents == null) return "";
   return (cents / 100).toLocaleString("sv-SE", {
@@ -66,10 +60,12 @@ async function itemAction(formData: FormData) {
 export default async function EditWishlistPage({
   params
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params; // 👈 viktigt
+
   const wl = await prisma.wishlist.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: { items: { orderBy: { createdAt: "desc" } } }
   });
   if (!wl) notFound();

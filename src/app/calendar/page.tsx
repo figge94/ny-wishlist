@@ -154,7 +154,11 @@ export default function CalendarPage() {
                       {/* Tid */}
                       <div className="text-xs text-slate-500 flex items-center gap-1">
                         <ClockIcon className="size-4 text-slate-400 shrink-0" />
-                        <span>{formatDateTime(r.time)}</span>
+                        {r.time ? (
+                          <span>{formatDateTime(r.time)}</span>
+                        ) : (
+                          <span>—</span>
+                        )}
                       </div>
 
                       {/* Lista */}

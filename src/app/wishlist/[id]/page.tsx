@@ -10,10 +10,12 @@ export const runtime = "nodejs";
 export default async function WishlistDetailPage({
   params
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params; // 👈 vänta in params
+
   const wl = await prisma.wishlist.findUnique({
-    where: { id: params.id },
+    where: { id }, // 👈 använd id här
     include: { items: { orderBy: { createdAt: "desc" } } }
   });
   if (!wl) notFound();
