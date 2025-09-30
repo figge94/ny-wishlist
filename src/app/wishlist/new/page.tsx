@@ -1,36 +1,41 @@
 // app/wishlist/new/page.tsx
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import { api } from "@/lib";
-
-async function createAction(formData: FormData) {
-  "use server";
-  const name = String(formData.get("name") || "").trim();
-  if (!name) throw new Error("Namn krävs");
-  const wl = await api.createList(name);
-  revalidatePath("/wishlist");
-  redirect(`/wishlist/${wl.id}`);
-}
+"use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function NewWishlistPage() {
+  const [name, setName] = useState("");
+  const [busy, setBusy] = useState(false);
+  const router = useRouter();
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    const res = await fetch("/api/wishlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name })
+    });
+    setBusy(false);
+    if (!res.ok) return alert("Kunde inte skapa lista");
+    router.push("/wishlist");
+  }
+
   return (
-    <section className="mx-auto max-w-xl">
-      <h1 className="text-2xl font-bold mb-4">Ny önskelista</h1>
-      <form action={createAction} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium">Namn</label>
-          <input
-            name="name"
-            required
-            className="mt-1 w-full rounded-lg border px-3 py-2"
-          />
-        </div>
-        <button
-          type="submit"
-          className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-          Skapa
-        </button>
-      </form>
-    </section>
+    <form onSubmit={onSubmit} className="mx-auto max-w-2xl space-y-3 p-4">
+      <h1 className="text-xl font-semibold">Ny önskelista</h1>
+      <input
+        className="w-full rounded border px-3 py-2"
+        placeholder="Namn på lista"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <button
+        type="submit"
+        disabled={busy}
+        className="rounded bg-violet-600 px-3 py-2 text-white cursor-pointer">
+        {busy ? "Skapar…" : "Skapa"}
+      </button>
+    </form>
   );
 }

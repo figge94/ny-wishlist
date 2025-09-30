@@ -1,106 +1,73 @@
-// app/wishlist/[id]/page.tsx
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import { api } from "@/lib";
+import { notFound } from "next/navigation";
+import { prisma } from "@/lib/db";
+import AddItemModal from "@/components/AddItemModal";
 
-async function addItemAction(formData: FormData) {
-  "use server";
-  const id = String(formData.get("id"));
-  const title = String(formData.get("title") || "").trim();
-  const url = String(formData.get("url") || "").trim() || undefined;
-  const price = formData.get("price")
-    ? Number(formData.get("price"))
-    : undefined;
-  await api.addItem(id, { title, url, price });
-  revalidatePath(`/wishlist/${id}`);
-  redirect(`/wishlist/${id}`);
-}
+import { fmtSEK } from "@/utils/currency"; // ✅ bara denna behövs här
 
-type Params = { id: string };
+export const runtime = "nodejs";
 
 export default async function WishlistDetailPage({
   params
 }: {
-  params: Promise<Params>;
+  params: { id: string };
 }) {
-  const { id } = await params; // ← viktig ändring
-  const wl = await api.getList(id);
-  if (!wl) return notFound();
+  const wl = await prisma.wishlist.findUnique({
+    where: { id: params.id },
+    include: { items: { orderBy: { createdAt: "desc" } } }
+  });
+  if (!wl) notFound();
 
   return (
-    <section className="mx-auto max-w-5xl">
-      <header className="mb-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">{wl.name}</h1>
-        </div>
-        <div className="flex gap-2">
-          <Link
-            href={`/wishlist/${wl.id}/edit`}
-            className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700">
-            Redigera
-          </Link>
-          <Link
-            href="/wishlist"
-            className="rounded-lg border px-3 py-1.5 text-sm hover:bg-gray-50">
-            Till listorna
-          </Link>
-        </div>
+    <section className="mx-auto max-w-5xl space-y-6">
+      <header className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">{wl.name}</h1>
+        <Link href="/wishlist" className="text-sm underline underline-offset-4">
+          Tillbaka
+        </Link>
       </header>
 
-      <article className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-neutral-900">
-        <h2 className="font-semibold mb-2">Saker</h2>
-        {wl.items.length ? (
+      <div className="space-y-6">
+        {/* Lägg till-panel överst */}
+        <div>
+          <AddItemModal wishlistId={wl.id} />
+        </div>
+
+        {/* Divider (valfritt) */}
+        <div className="h-px bg-gray-200 dark:bg-gray-700" />
+
+        {/* Listan */}
+        <div>
           <ul className="space-y-2">
-            {wl.items.map((it) => (
+            {wl.items.map((i) => (
               <li
-                key={it.id}
-                className="flex items-center justify-between rounded-lg border px-3 py-2">
-                <div>
-                  <div className="font-medium">{it.title}</div>
-                  <div className="text-xs text-gray-500">
-                    {it.url && (
-                      <a className="underline" href={it.url} target="_blank">
-                        Länk
-                      </a>
-                    )}{" "}
-                    {it.price ? `• ${it.price} kr` : ""}
-                  </div>
+                key={i.id}
+                className="rounded-md bg-stone-50 drop-shadow-xs shadow border border-stone-100 p-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="font-medium">{i.title}</div>
+                  {i.priceInCents != null && (
+                    <div className="text-sm text-gray-700">
+                      {fmtSEK(i.priceInCents)}
+                    </div>
+                  )}
                 </div>
-                {/* små actions kan läggas senare (toggle done, delete) */}
+                {i.url && (
+                  <a
+                    href={i.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 underline break-all">
+                    {i.url}
+                  </a>
+                )}
               </li>
             ))}
+            {wl.items.length === 0 && (
+              <li className="text-gray-500">Inga saker ännu.</li>
+            )}
           </ul>
-        ) : (
-          <p className="text-gray-500">Inga saker ännu.</p>
-        )}
-
-        {/* Lägg till sak */}
-        <form action={addItemAction} className="mt-4 grid gap-2 sm:grid-cols-4">
-          <input type="hidden" name="id" value={wl.id} />
-          <input
-            name="title"
-            placeholder="Titel"
-            required
-            className="rounded-lg border px-3 py-2 sm:col-span-2"
-          />
-          <input
-            name="url"
-            placeholder="URL (valfritt)"
-            className="rounded-lg border px-3 py-2"
-          />
-          <input
-            name="price"
-            type="number"
-            step="1"
-            placeholder="Pris"
-            className="rounded-lg border px-3 py-2"
-          />
-          <button className="sm:col-span-4 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-            Lägg till
-          </button>
-        </form>
-      </article>
+        </div>
+      </div>
     </section>
   );
 }

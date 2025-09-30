@@ -1,0 +1,8 @@
+-- CreateTable
+CREATE TABLE "Reminder" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "title" TEXT NOT NULL,
+    "dueAt" DATETIME NOT NULL,
+    "done" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

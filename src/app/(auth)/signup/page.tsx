@@ -1,7 +1,8 @@
-// app/(auth)/signup/page.tsx
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { Parisienne } from "next/font/google";
 
 const parisienne = Parisienne({ subsets: ["latin"], weight: "400" });
@@ -29,11 +30,34 @@ export default function SignUpPage() {
 
     try {
       setLoading(true);
-      // TODO: Byt till ditt API-endpoint
-      // const res = await fetch("/api/signup", { method:"POST", body: JSON.stringify(data) });
-      // if (!res.ok) throw new Error("Kunde inte skapa konto");
-      // Router push etc.
-      alert("Skulle registrera användare här ✅");
+
+      // 1. Skicka till ditt API
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          password: data.password
+        })
+      });
+
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(result.error || "Kunde inte skapa konto");
+
+      // 2. Autologin via NextAuth
+      const login = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false
+      });
+
+      if (login?.ok) {
+        window.location.href = "/dashboard"; // logga in och gå till dashboard
+      } else {
+        window.location.href = "/login"; // fallback
+      }
+
       form.reset();
     } catch (err: any) {
       setError(err.message ?? "Ett fel uppstod.");

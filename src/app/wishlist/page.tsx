@@ -1,16 +1,30 @@
 // app/wishlist/page.tsx
 import Link from "next/link";
-import { api } from "@/lib";
 import HowTo from "@/components/HowTo";
-
-// TODO: ersätt med data från DB
-const mockLists = [
-  { id: "a1", name: "Jul 2025", items: 4 },
-  { id: "b2", name: "Födelsedag", items: 2 }
-];
+import { prisma } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export default async function WishlistIndexPage() {
-  const lists = api.listAll();
+  const session = await getServerSession(authOptions);
+  const userId = (session?.user as any)?.id as string | undefined;
+
+  // Om utloggad kan du välja att redirecta, eller visa tom vy
+  if (!userId) {
+    return (
+      <section className="mx-auto max-w-5xl py-8">
+        <h1 className="text-2xl font-bold mb-4">Önskelistor</h1>
+        <p className="text-gray-500">Logga in för att se dina listor.</p>
+      </section>
+    );
+  }
+
+  const lists = await prisma.wishlist.findMany({
+    where: { ownerId: userId },
+    orderBy: { createdAt: "desc" },
+    include: { _count: { select: { items: true } } }
+  });
+
   return (
     <section className="mx-auto max-w-5xl">
       <header className="mb-4 flex items-center justify-between">
@@ -21,25 +35,28 @@ export default async function WishlistIndexPage() {
           Ny lista
         </Link>
       </header>
-      <div className="mb-8">
-        {/* Tipsruta */}
-        <HowTo />
-      </div>
+
+      {/* Visa HowTo ENDAST om inga listor finns */}
+      {lists.length === 0 && (
+        <div className="mb-8">
+          <HowTo />
+        </div>
+      )}
 
       <ul className="grid gap-4 sm:grid-cols-2">
-        {mockLists.map((l) => (
+        {lists.map((l) => (
           <li key={l.id}>
             <Link
               href={`/wishlist/${l.id}`}
               className="block rounded-md backdrop-blur bg-white p-4 shadow-md hover:shadow-lg dark:border-gray-800 dark:bg-neutral-900">
               <h2 className="font-semibold">{l.name}</h2>
-              <p className="text-sm text-gray-500">{l.items} saker</p>
+              <p className="text-sm text-gray-500">{l._count.items} saker</p>
             </Link>
           </li>
         ))}
       </ul>
 
-      {mockLists.length === 0 && (
+      {lists.length === 0 && (
         <div className="mt-8 rounded-xl border border-dashed p-8 text-center text-gray-500">
           Inga listor ännu. Skapa din första!
         </div>

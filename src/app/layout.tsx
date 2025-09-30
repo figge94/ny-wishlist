@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Lexend } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import Providers from "@/components/Providers";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -31,14 +32,16 @@ export default function RootLayout({
   return (
     <html
       lang="sv"
-      className={lexend.className} // 👈 Här aktiveras Lexend globalt
+      className={lexend.className}
       data-scroll-behavior="smooth"
       suppressHydrationWarning>
       <body
         className="font-light min-h-screen bg-white text-slate-900 antialiased dark:bg-neutral-950 dark:text-white
           selection:bg-violet-300/60 dark:selection:bg-violet-500/40">
-        <Navbar />
-        <main className="mx-auto max-w-5xl px-4 sm:px-6">{children}</main>
+        <Providers>
+          <Navbar />
+          <main className="mx-auto max-w-5xl px-4 sm:px-6">{children}</main>
+        </Providers>
       </body>
     </html>
   );

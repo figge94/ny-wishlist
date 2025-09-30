@@ -1,10 +1,11 @@
-// app/dashboard/reminders/page.tsx
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/lib";
 
-function fmt(d: string) {
+export const runtime = "nodejs"; // Prisma kräver Node
+
+function fmt(d: Date | string) {
   return new Date(d).toLocaleString("sv-SE", {
     year: "numeric",
     month: "short",
@@ -33,11 +34,8 @@ async function deleteReminder(formData: FormData) {
   redirect("/dashboard/reminders");
 }
 
-export default function RemindersPage() {
-  const reminders = api
-    .listReminders()
-    .slice()
-    .sort((a, b) => a.dueAt.localeCompare(b.dueAt));
+export default async function RemindersPage() {
+  const reminders = await api.listReminders(); // 👈 viktig ändring
 
   return (
     <section className="mx-auto max-w-5xl space-y-5 px-4 py-5 sm:px-6 lg:px-8 lg:py-6">
@@ -50,7 +48,6 @@ export default function RemindersPage() {
         </Link>
       </header>
 
-      {/* Lista */}
       <div className="rounded-md border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-neutral-900 sm:px-6 lg:px-8">
         {reminders.length ? (
           <ul className="divide-y divide-zinc-300">
@@ -64,7 +61,6 @@ export default function RemindersPage() {
                 </div>
 
                 <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
-                  {/* status-chip */}
                   <span
                     className={[
                       "rounded-full px-3 py-1 text-xs ring-1 ring-inset",
@@ -93,8 +89,7 @@ export default function RemindersPage() {
                     <input type="hidden" name="id" value={r.id} />
                     <button
                       type="submit"
-                      className="rounded-sm backdrop-blur-lg shadow-lg border border-rose-600 bg-rose-500 text-white px-3 py-1.5 text-xs hover:bg-rose-400 hover:border-rose-400 cursor-pointer"
-                      formAction={deleteReminder}>
+                      className="rounded-sm backdrop-blur-lg shadow-lg border border-rose-600 bg-rose-500 text-white px-3 py-1.5 text-xs hover:bg-rose-400 hover:border-rose-400 cursor-pointer">
                       Ta bort
                     </button>
                   </form>

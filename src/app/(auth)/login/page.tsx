@@ -2,6 +2,8 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Parisienne } from "next/font/google";
 
 const parisienne = Parisienne({ subsets: ["latin"], weight: "400" });
@@ -10,24 +12,31 @@ export default function LoginPage() {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries()) as {
       email: string;
       password: string;
-      remember?: string;
     };
 
     try {
       setLoading(true);
-      // TODO: Byt till ditt riktiga endpoint
-      // const res = await fetch("/api/login", { method:"POST", body: JSON.stringify(data) });
-      // if (!res.ok) throw new Error("Fel e-post eller lösenord");
-      alert("Skulle logga in här ✅");
-      // router.push("/dashboard");
+      const res = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false // vi hanterar redirect själva
+      });
+
+      if (res?.ok) {
+        router.push("/dashboard");
+      } else {
+        setError("Fel e-post eller lösenord.");
+      }
     } catch (err: any) {
       setError(err.message ?? "Kunde inte logga in.");
     } finally {
@@ -84,22 +93,6 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <label className="inline-flex items-center gap-2 text-sm text-slate-600">
-              <input
-                type="checkbox"
-                name="remember"
-                className="rounded border-gray-100"
-              />
-              Kom ihåg mig
-            </label>
-            <Link
-              href="/forgot"
-              className="text-sm text-sky-600 hover:underline">
-              Glömt lösenord?
-            </Link>
-          </div>
-
           {error && <p className="text-sm text-red-600">{error}</p>}
 
           <button
@@ -110,7 +103,9 @@ export default function LoginPage() {
 
           <p className="text-sm text-gray-600 text-center">
             Ny här?{" "}
-            <Link href="/signup" className="text-sky-600 hover:underline">
+            <Link
+              href="/signup"
+              className="text-sky-600 hover:underline hover:underline-offset-4">
               Skapa konto
             </Link>
           </p>

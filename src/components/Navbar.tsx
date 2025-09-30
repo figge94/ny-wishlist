@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Parisienne } from "next/font/google";
-import { useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 const parisienne = Parisienne({ subsets: ["latin"], weight: "400" });
 
@@ -22,15 +22,14 @@ function cx(...cls: (string | false | undefined)[]) {
 export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
 
   // 🔒 Lås body-scroll när mobilmenyn är öppen
   useEffect(() => {
-    // skydd vid SSR
     if (typeof document === "undefined") return;
     const body = document.body;
     if (open) body.classList.add("overflow-hidden");
     else body.classList.remove("overflow-hidden");
-    // städa upp om komponenten unmountas medan menyn är öppen
     return () => body.classList.remove("overflow-hidden");
   }, [open]);
 
@@ -65,7 +64,6 @@ export default function Navbar() {
                       : "text-gray-700 hover:text-violet-600"
                   )}>
                   {l.label}
-                  {/* underline animation */}
                   <span
                     className={cx(
                       "absolute -bottom-1 left-0 h-0.5 bg-violet-600 transition-all duration-300 ease-out",
@@ -77,17 +75,29 @@ export default function Navbar() {
             })}
           </div>
 
+          {/* Höger hörn – auth-knappar */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="/login"
-              className="rounded-md bg-violet-500 px-4 py-2 text-sm font-medium text-white hover:bg-violet-400 drop-shadow active:scale-95 transition-all duration-200">
-              Logga in
-            </Link>
-            <Link
-              href="/signup"
-              className="rounded-md bg-slate-600 px-4 py-2 text-sm font-medium text-white hover:bg-slate-500 drop-shadow active:scale-95 transition-all duration-200">
-              Skapa konto
-            </Link>
+            {!session ? (
+              <>
+                <Link
+                  href="/login"
+                  className="rounded-md bg-violet-500 px-4 py-2 text-sm font-medium text-white hover:bg-violet-400 drop-shadow active:scale-95 transition-all duration-200">
+                  Logga in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="rounded-md bg-slate-600 px-4 py-2 text-sm font-medium text-white hover:bg-slate-500 drop-shadow active:scale-95 transition-all duration-200">
+                  Skapa konto
+                </Link>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="rounded-md bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-500 drop-shadow active:scale-95 transition-all duration-200 cursor-pointer">
+                Logga ut
+              </button>
+            )}
           </div>
 
           {/* Mobile toggle */}
@@ -123,9 +133,7 @@ export default function Navbar() {
         <div
           className={cx(
             "md:hidden overflow-hidden transition-all duration-300 ease-in-out",
-            open
-              ? "max-h-96 opacity-100 delay-75" // öppning → lite delay på opacity
-              : "max-h-0 opacity-0 delay-0" // stängning → ingen delay
+            open ? "max-h-96 opacity-100 delay-75" : "max-h-0 opacity-0 delay-0"
           )}>
           <div className="pb-4 transition-opacity duration-300">
             <div className="space-y-1">
@@ -149,18 +157,32 @@ export default function Navbar() {
               })}
             </div>
             <div className="mt-3 flex gap-2">
-              <Link
-                href="/login"
-                onClick={() => setOpen(false)}
-                className="flex-1 rounded-md border bg-slate-50 border-slate-100 px-3 py-2 text-center shadow-sm text-sm text-gray-700 hover:bg-slate-100">
-                Logga in
-              </Link>
-              <Link
-                href="/signup"
-                onClick={() => setOpen(false)}
-                className="flex-1 rounded-md bg-slate-600 px-3 py-2 text-center text-sm text-white hover:bg-slate-700 shadow-sm">
-                Skapa konto
-              </Link>
+              {!session ? (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setOpen(false)}
+                    className="flex-1 rounded-md border bg-slate-50 border-slate-100 px-3 py-2 text-center shadow-sm text-sm text-gray-700 hover:bg-slate-100">
+                    Logga in
+                  </Link>
+                  <Link
+                    href="/signup"
+                    onClick={() => setOpen(false)}
+                    className="flex-1 rounded-md bg-slate-600 px-3 py-2 text-center text-sm text-white hover:bg-slate-700 shadow-sm">
+                    Skapa konto
+                  </Link>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    signOut({ callbackUrl: "/" });
+                  }}
+                  className="flex-1 rounded-md bg-rose-600 px-3 py-2 text-center text-sm text-white hover:bg-rose-500 shadow-sm cursor-pointer">
+                  Logga ut
+                </button>
+              )}
             </div>
           </div>
         </div>

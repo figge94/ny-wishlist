@@ -12,7 +12,8 @@ import {
   Clock
 } from "lucide-react";
 
-function fmt(d: string) {
+function fmt(d: Date | string) {
+  // ✅
   return new Date(d).toLocaleString("sv-SE", {
     year: "numeric",
     month: "short",
@@ -44,18 +45,14 @@ const S = {
   listMeta: "text-xs text-muted-foreground"
 };
 
-export default function DashboardPage() {
-  // Data
-  const lists = api.listAll();
-  const reminders = api
-    .listReminders()
-    .slice()
-    .sort((a, b) => a.dueAt.localeCompare(b.dueAt))
-    .slice(0, 3);
+export default async function DashboardPage() {
+  const [lists, reminders] = await Promise.all([
+    api.listAll(),
+    api.listReminders() // ← vänta in
+  ]);
 
-  // Stats
   const allItems = lists.flatMap((l) => l.items);
-  const doneCount = allItems.filter((i) => i.done).length;
+  const doneCount = allItems.filter((i: any) => i.done).length || 0;
   const todoCount = allItems.length - doneCount;
 
   const stats = [
@@ -65,6 +62,10 @@ export default function DashboardPage() {
   ];
 
   const recentLists = lists.slice(0, 3);
+  const remindersTop3 = reminders
+    .slice()
+    .sort((a, b) => a.dueAt.getTime() - b.dueAt.getTime()) // ✅
+    .slice(0, 3);
 
   return (
     <div className="relative">
