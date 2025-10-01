@@ -14,59 +14,86 @@ generator client {
 }
 
 model User {
-  id        String     @id @default(cuid())
-  email     String     @unique
-  name      String?
-  password  String     // hash (bcrypt)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime @updatedAt @default(now())
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  password      String // hash (bcrypt)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
   emailInvites  Boolean  @default(false)
   listUpdates   Boolean  @default(false)
   purchaseMarks Boolean  @default(false)
+
+  sentRequests     FriendRequest[] @relation("SentRequests")
+  receivedRequests FriendRequest[] @relation("ReceivedRequests")
 
   wishlists Wishlist[]
   reminders Reminder[]
 }
 
 model Wishlist {
-  id         String   @id @default(cuid())
-  name       String
-  owner      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade) 
-  ownerId    String
-  createdAt  DateTime @default(now())
- updatedAt DateTime @updatedAt @default(now())                                             
-  items      Item[]
+  id        String   @id @default(cuid())
+  name      String
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  items     Item[]
 
-  @@index([ownerId]) 
   @@unique([ownerId, name])
+  @@index([ownerId])
 }
 
 model Item {
-  id           String    @id @default(cuid())
+  id           String   @id @default(cuid())
   title        String
   url          String?
-  createdAt    DateTime  @default(now())
-  updatedAt DateTime @updatedAt @default(now())                                         
-  wishlist     Wishlist  @relation(fields: [wishlistId], references: [id], onDelete: Cascade) 
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+  wishlist     Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
   wishlistId   String
-  done         Boolean   @default(false)
+  done         Boolean  @default(false)
   priceInCents Int?
 
   @@index([wishlistId])
-  @@index([wishlistId, done])     
+  @@index([wishlistId, done])
 }
 
 model Reminder {
-  id         String   @id @default(cuid())
-  title      String
-  dueAt      DateTime
-  done       Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())                   
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
+  id        String   @id @default(cuid())
+  title     String
+  dueAt     DateTime
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
 
   @@index([userId])
-  @@index([userId, dueAt]) 
-  @@index([userId, done])    
+  @@index([userId, dueAt])
+  @@index([userId, done])
+}
+
+model Friend {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model FriendRequest {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // avsändare
+  fromUser   User   @relation("SentRequests", fields: [fromUserId], references: [id], onDelete: Cascade)
+  fromUserId String
+
+  // mottagare
+  toUser   User   @relation("ReceivedRequests", fields: [toUserId], references: [id], onDelete: Cascade)
+  toUserId String
+
+  status String @default("pending") // "pending" | "accepted" | "declined"
+
+  @@unique([fromUserId, toUserId]) 
 }
