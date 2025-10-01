@@ -1,4 +1,5 @@
 // lib/api/friends.ts
+import type { Friend } from "@prisma/client";
 export type ApiResult<T> = { ok: true; data: T } | { ok: false; error: string };
 
 async function json<T>(res: Response): Promise<ApiResult<T>> {

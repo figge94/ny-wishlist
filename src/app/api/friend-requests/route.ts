@@ -1,28 +1,28 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
-export async function POST(req: Request) {
-  const { fromUserId, toUserId } = await req.json();
-  if (!fromUserId || !toUserId) {
-    return new NextResponse("fromUserId och toUserId krävs", { status: 400 });
-  }
-  if (fromUserId === toUserId) {
-    return new NextResponse("Kan inte skicka till dig själv", { status: 400 });
-  }
+// GET /api/friend-requests?userId=...&in=received|sent
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const me = searchParams.get("userId");
+  const scope = searchParams.get("in") ?? "received";
+  if (!me) return new NextResponse("userId required", { status: 400 });
 
-  // OBS: Detta kräver FriendRequest-modellen kopplad till User (fromUserId/toUserId)
-  // Om du inte har det ännu: kör migrationen jag visade tidigare med fromUserId/toUserId + @@unique.
-  const [from, to] = await Promise.all([
-    prisma.user.findUnique({ where: { id: fromUserId } }),
-    prisma.user.findUnique({ where: { id: toUserId } })
-  ]);
-  if (!from || !to) return new NextResponse("User not found", { status: 404 });
+  const where =
+    scope === "sent"
+      ? { fromUserId: me, status: "pending" }
+      : { toUserId: me, status: "pending" };
 
-  const fr = await prisma.friendRequest.upsert({
-    where: { fromUserId_toUserId: { fromUserId, toUserId } },
-    update: {},
-    create: { fromUserId, toUserId, status: "pending" }
+  const items = await prisma.friendRequest.findMany({
+    where,
+    select: {
+      id: true,
+      createdAt: true,
+      fromUser: { select: { id: true, name: true, email: true } },
+      toUser: { select: { id: true, name: true, email: true } }
+    },
+    orderBy: { createdAt: "desc" }
   });
 
-  return NextResponse.json(fr, { status: 201 });
+  return NextResponse.json(items);
 }

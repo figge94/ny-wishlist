@@ -2,21 +2,29 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
-export async function GET() {
-  const friends = await prisma.friend.findMany({
+// TEMP: vi skickar userId via query ?userId=...
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const me = searchParams.get("userId");
+  if (!me) return new NextResponse("userId required", { status: 400 });
+
+  // vänner = alla accepted friendRequests där jag är from/to
+  const accepted = await prisma.friendRequest.findMany({
+    where: {
+      status: "accepted",
+      OR: [{ fromUserId: me }, { toUserId: me }]
+    },
+    select: {
+      fromUserId: true,
+      toUserId: true,
+      fromUser: { select: { id: true, name: true, email: true } },
+      toUser: { select: { id: true, name: true, email: true } }
+    },
     orderBy: { createdAt: "desc" }
   });
-  return NextResponse.json(friends);
-}
 
-export async function POST(req: Request) {
-  const { email } = await req.json();
-  if (!email || typeof email !== "string") {
-    return new NextResponse("Email is required", { status: 400 });
-  }
-  // Skapa en förfrågan i FriendRequest i stället för att direkt lägga till som vän
-  await prisma.friendRequest.create({
-    data: { email, name: email.split("@")[0] }
-  });
-  return NextResponse.json({ message: "Invited" }, { status: 201 });
+  const items = accepted.map((r) =>
+    r.fromUserId === me ? r.toUser : r.fromUser
+  );
+  return NextResponse.json(items);
 }
