@@ -1,7 +1,5 @@
 // components/breadcrumbs.tsx
-
 "use client";
-
 import { usePathname } from "next/navigation";
 
 // Simplified breadcrumbs logic

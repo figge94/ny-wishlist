@@ -71,3 +71,14 @@ export function formatDateTimeLocal(d: Date) {
     minute: "2-digit"
   });
 }
+
+export function fmtSv(date: Date | string) {
+  const d = typeof date === "string" ? new Date(date) : date;
+  return d.toLocaleString("sv-SE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}

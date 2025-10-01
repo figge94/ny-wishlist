@@ -1,18 +1,42 @@
-// src/actions/actions.ts
+// actions/actions.ts (server)
 "use server";
-import { prisma } from "@/lib/db";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { toCents } from "@/utils/currency";
 
-export async function addItemAction(formData: FormData) {
-  const wishlistId = String(formData.get("wishlistId") || "");
-  const title = String(formData.get("title") || "").trim();
-  const url = String(formData.get("url") || "").trim() || null;
-  const priceInCents = toCents(formData.get("price"));
-  if (!wishlistId || !title) return;
+import { prisma } from "@/lib";
+import { z } from "zod";
 
-  await prisma.item.create({ data: { title, url, priceInCents, wishlistId } });
-  revalidatePath(`/wishlist/${wishlistId}`);
-  redirect(`/wishlist/${wishlistId}`);
+const Body = z.object({
+  wishlistId: z.string().min(1),
+  title: z.string().min(1),
+  url: z.string().url().optional().or(z.literal("")),
+  price: z.string().optional() // parse till number på serversidan
+});
+
+export async function addItemAction(fd: FormData) {
+  const payload = Object.fromEntries(fd.entries());
+  const parsed = Body.safeParse(payload);
+  if (!parsed.success) {
+    return { ok: false, error: "Ogiltiga fält." };
+  }
+
+  const { wishlistId, title, url, price } = parsed.data;
+  // Konvertera price-string → ören (int) om du vill spara i cents
+  const priceInCents =
+    price && price.trim()
+      ? Math.round(Number(price.replace(",", ".")) * 100)
+      : null;
+
+  try {
+    await prisma.item.create({
+      data: {
+        title,
+        url: url || null,
+        priceInCents,
+        wishlistId
+      }
+    });
+    return { ok: true };
+  } catch (e) {
+    console.error("addItemAction error:", e);
+    return { ok: false, error: "Kunde inte spara. Försök igen." };
+  }
 }
