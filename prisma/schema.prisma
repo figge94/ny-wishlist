@@ -19,36 +19,54 @@ model User {
   name      String?
   password  String     // hash (bcrypt)
   createdAt DateTime   @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  emailInvites  Boolean  @default(false)
+  listUpdates   Boolean  @default(false)
+  purchaseMarks Boolean  @default(false)
+
   wishlists Wishlist[]
   reminders Reminder[]
 }
 
 model Wishlist {
-  id        String   @id @default(cuid())
-  name      String
-  owner     User     @relation(fields: [ownerId], references: [id])
-  ownerId   String
-  createdAt DateTime @default(now())
-  items     Item[]
+  id         String   @id @default(cuid())
+  name       String
+  owner      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade) 
+  ownerId    String
+  createdAt  DateTime @default(now())
+ updatedAt DateTime @updatedAt @default(now())                                             
+  items      Item[]
+
+  @@index([ownerId]) 
+  @@unique([ownerId, name])
 }
 
 model Item {
-   id         String   @id @default(cuid())
-  title      String
-  url        String?
-  createdAt  DateTime @default(now())
-  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
-  wishlistId String
-  done       Boolean  @default(false)
+  id           String    @id @default(cuid())
+  title        String
+  url          String?
+  createdAt    DateTime  @default(now())
+  updatedAt DateTime @updatedAt @default(now())                                         
+  wishlist     Wishlist  @relation(fields: [wishlistId], references: [id], onDelete: Cascade) 
+  wishlistId   String
+  done         Boolean   @default(false)
   priceInCents Int?
+
+  @@index([wishlistId])
+  @@index([wishlistId, done])     
 }
 
 model Reminder {
-  id        String   @id @default(cuid())
-  title     String
-  dueAt     DateTime
-  done      Boolean  @default(false)
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  id         String   @id @default(cuid())
+  title      String
+  dueAt      DateTime
+  done       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())                   
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+
+  @@index([userId])
+  @@index([userId, dueAt]) 
+  @@index([userId, done])    
 }

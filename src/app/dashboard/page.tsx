@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Clock
 } from "lucide-react";
+import type { ReactNode } from "react";
 
 function fmt(d: Date | string) {
   // ✅

@@ -1,15 +1,16 @@
 // /lib/date.ts
-export function toDate(d: string, t?: string) {
-  return new Date(t ? `${d}T${t}:00` : `${d}T00:00:00`);
+export function toDate(date: string, time?: string | null): Date {
+  if (!time) return new Date(date + "T00:00");
+  return new Date(`${date}T${time}`);
 }
 
-export function addDays(isoDate: string, days: number) {
-  const d = new Date(isoDate);
+export function addDays(dateIso: string, days: number): string {
+  const d = new Date(dateIso);
   d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
+  return d.toISOString().slice(0, 10); // YYYY-MM-DD
 }
 
-export function stripTime(d: Date) {
+export function stripTime(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
 
@@ -33,6 +34,7 @@ export function formatDate(date: string) {
   });
 }
 
+// Svenska månader
 export const month_sv = [
   "januari",
   "februari",
@@ -47,3 +49,25 @@ export const month_sv = [
   "november",
   "december"
 ];
+
+/** "YYYY-MM-DD" (+ ev. nu) → default "YYYY-MM-DDTHH:mm" (nästa heltimme) */
+export function nextTopOfHourLocalFor(dateIso?: string | null) {
+  const base = dateIso ? new Date(dateIso + "T00:00") : new Date();
+  base.setMinutes(0, 0, 0);
+  base.setHours(base.getHours() + 1);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${base.getFullYear()}-${pad(base.getMonth() + 1)}-${pad(
+    base.getDate()
+  )}T${pad(base.getHours())}:${pad(base.getMinutes())}`;
+}
+
+/** Samlad visning: t.ex. "tis 3 sep, 14:00" */
+export function formatDateTimeLocal(d: Date) {
+  return d.toLocaleString(undefined, {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}

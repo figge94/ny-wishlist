@@ -1,15 +1,17 @@
 // src/lib/index.ts
 import { prisma } from "./db";
+export { prisma } from "./prisma";
 
 export * from "./news";
 export * from "./storage";
-export * from "./definitions";
 export * from "./date";
-export * from "./data";
 export * from "./db";
 export * from "./id";
 export * from "./styles";
 export * from "./news";
+export * from "./types";
+export { getUser } from "./user";
+export type { AppUser } from "./user";
 
 export const api = {
   // Wishlists (redan klart hos dig)
