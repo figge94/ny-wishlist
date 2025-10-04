@@ -1,46 +1,47 @@
 "use client";
-import { useState, useCallback } from "react";
+
+import { useCallback, useMemo, useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export function useLogin() {
-  const [error, setError] = useState<string | null>(null);
+  const sp = useSearchParams();
+  const callbackUrl = useMemo(() => sp.get("callbackUrl") ?? "/", [sp]);
+
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
   const onSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setError(null);
-
-      const data = Object.fromEntries(
-        new FormData(e.currentTarget).entries()
-      ) as {
-        email: string;
-        password: string;
-      };
-
+      setLoading(true);
       try {
-        setLoading(true);
+        const fd = new FormData(e.currentTarget);
+        const email = String(fd.get("email") || "");
+        const password = String(fd.get("password") || "");
+
+        // NextAuth hanterar redirect själv om redirect: true
         const res = await signIn("credentials", {
-          email: data.email,
-          password: data.password,
-          redirect: false
+          email,
+          password,
+          redirect: true,
+          callbackUrl
         });
 
-        if (res?.ok) {
-          router.push("/dashboard");
-        } else {
-          setError("Fel e-post eller lösenord.");
-        }
-      } catch (err: any) {
-        setError(err?.message ?? "Kunde inte logga in.");
+        // OBS: vid redirect kommer vi inte tillbaka hit.
+        if (res?.error) setError("Fel e-post eller lösenord.");
+      } catch (err) {
+        setError("Något gick fel. Försök igen.");
       } finally {
         setLoading(false);
       }
     },
-    [router]
+    [callbackUrl]
   );
 
-  return { onSubmit, error, loading };
+  const signInWithGoogle = () => signIn("google", { callbackUrl });
+  const signInWithGitHub = () => signIn("github", { callbackUrl });
+
+  return { onSubmit, loading, error, signInWithGoogle, signInWithGitHub };
 }

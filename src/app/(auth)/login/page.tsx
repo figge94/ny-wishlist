@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Parisienne } from "next/font/google";
 import { LoginForm } from "@/components/LoginForm";
+import { CreatedBanner } from "@/components/CreatedBanner";
 
 const parisienne = Parisienne({ subsets: ["latin"], weight: "400" });
 
@@ -15,6 +16,8 @@ export default function LoginPage() {
         <p className="text-center text-gray-500 mt-1">
           Önskelistor utan krångel.
         </p>
+
+        <CreatedBanner />
 
         <LoginForm />
 
