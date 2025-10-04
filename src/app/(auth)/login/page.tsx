@@ -1,7 +1,9 @@
+// app/(auth)/login/page.tsx
 import Link from "next/link";
 import { Parisienne } from "next/font/google";
 import { LoginForm } from "@/components/LoginForm";
 import { CreatedBanner } from "@/components/CreatedBanner";
+import { Suspense } from "react";
 
 const parisienne = Parisienne({ subsets: ["latin"], weight: "400" });
 
@@ -17,9 +19,13 @@ export default function LoginPage() {
           Önskelistor utan krångel.
         </p>
 
-        <CreatedBanner />
+        <Suspense fallback={null}>
+          <CreatedBanner />
+        </Suspense>
 
-        <LoginForm />
+        <Suspense fallback={null}>
+          <LoginForm />
+        </Suspense>
 
         <p className="text-sm text-gray-600 text-center mt-4">
           Ny här?{" "}

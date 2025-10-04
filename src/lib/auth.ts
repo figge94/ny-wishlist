@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import GitHub from "next-auth/providers/github";
 import { prisma } from "@/lib/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 type Creds = { email?: string; password?: string };
 
@@ -15,12 +15,21 @@ export const authOptions: NextAuthOptions = {
       async authorize(c) {
         const { email, password } = (c ?? {}) as Creds;
         if (!email || !password) return null;
+
+        const normalized = email.toLowerCase().trim();
+
         const user = await prisma.user.findUnique({
-          where: { email: email.toLowerCase().trim() }
+          where: { email: normalized },
+          select: { id: true, email: true, name: true, password: true } // ✅ hämta hash
         });
-        if (!user) return null;
-        const ok = await bcrypt.compare(password, user.password);
-        return ok ? { id: user.id, email: user.email, name: user.name } : null;
+
+        // OAuth-användare saknar hash → avbryt
+        if (!user || !user.password) return null;
+
+        const ok = await bcrypt.compare(password, user.password); // ✅ nu är det en string
+        return ok
+          ? { id: user.id, email: user.email, name: user.name ?? undefined }
+          : null;
       }
     })
   ],
@@ -36,4 +45,4 @@ export const authOptions: NextAuthOptions = {
   }
 };
 
-export default NextAuth(authOptions); // v4 kräver default export för API-routen
+export default NextAuth(authOptions);
